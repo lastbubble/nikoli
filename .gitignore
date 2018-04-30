@@ -4,3 +4,4 @@
 .settings/
 .sts4-cache/
 bin/
+build/
