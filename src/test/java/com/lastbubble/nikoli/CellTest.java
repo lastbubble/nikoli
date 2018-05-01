@@ -54,9 +54,5 @@ public class CellTest {
     assertThat(cell, equalTo(Cell.at(cell.x(), cell.y())));
   }
 
-  private Cell randomCell() {
-
-    int x = naturalNumber();
-    return Cell.at(x, naturalNumberOtherThan(x));
-  }
+  private Cell randomCell() { return Cell.at(naturalNumber(), naturalNumber()); }
 }

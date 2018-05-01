@@ -44,6 +44,7 @@ public class GridTest {
 
     int numberOfCells = grid.width() * grid.height();
     assertThat(grid.cells().distinct().count(), is((long) numberOfCells));
+    assertThat(grid.cells().filter(c -> c.x() >= grid.width() || c.y() >= grid.height()).count(), is(0L));
   }
 
   @Test public void expandToIncludeAssignedCells() {

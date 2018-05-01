@@ -6,7 +6,7 @@ import java.util.Random;
 public class RandomNumbers {
 
   private static final PrimitiveIterator.OfInt naturalNumbers = new Random().ints(0, 10).iterator();
-  private static final PrimitiveIterator.OfInt positiveNumbers = new Random().ints(0, 10).iterator();
+  private static final PrimitiveIterator.OfInt positiveNumbers = new Random().ints(1, 10).iterator();
 
   public static int naturalNumber() { return naturalNumbers.nextInt(); }
 
