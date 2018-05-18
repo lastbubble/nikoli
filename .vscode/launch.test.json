@@ -1,0 +1,28 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "Nikoli",
+                "projectName": "Nikoli",
+                "workingDirectory": "/Users/eric/Projects/personal/Nikoli",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "Nikoli",
+                "projectName": "Nikoli",
+                "workingDirectory": "/Users/eric/Projects/personal/Nikoli",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
