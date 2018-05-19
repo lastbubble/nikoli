@@ -1,6 +1,10 @@
 package com.lastbubble.nikoli.takegaki;
 
+import com.lastbubble.nikoli.Cell;
+
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Edge {
 
@@ -24,6 +28,19 @@ public class Edge {
     if (!b) { throw new IllegalArgumentException(reason); }
   }
 
+  public static Edge topOf(Cell c) { return Edge.at(c.x(), c.y() + 1, H); }
+
+  public static Edge leftOf(Cell c) { return Edge.at(c.x(), c.y(), V); }
+
+  public static Edge bottomOf(Cell c) { return Edge.at(c.x(), c.y(), H); }
+
+  public static Edge rightOf(Cell c) { return Edge.at(c.x() + 1, c.y(), V); }
+
+  public static Stream<Edge> edgesOf(Cell c) {
+
+    return Stream.of(topOf(c), leftOf(c), bottomOf(c), rightOf(c));
+  }
+
   private final int x;
   private final int y;
   private final Orientation o;
@@ -38,6 +55,54 @@ public class Edge {
   public int x() { return x; }
   public int y() { return y; }
   public Orientation orientation() { return o; }
+
+  public Stream<Edge> neighbors(boolean forward) {
+
+    Cell cell = Cell.at(x(), y());
+
+    Stream<Optional<Edge>> neighbors;
+
+    if (orientation() == H) {
+
+      if (forward) {
+
+        neighbors = Stream.of(
+          Optional.of(rightOf(cell)),
+          cell.toRight().map(c -> bottomOf(c)),
+          cell.below().map(c -> rightOf(c))
+        );
+
+      } else {
+
+        neighbors = Stream.of(
+          Optional.of(leftOf(cell)),
+          cell.toLeft().map(c -> bottomOf(c)),
+          cell.below().map(c -> leftOf(c))
+        );
+      }
+
+    } else {
+
+      if (forward) {
+
+        neighbors = Stream.of(
+          Optional.of(topOf(cell)),
+          cell.toLeft().map(c -> topOf(c)),
+          cell.above().map(c -> leftOf(c))
+        );
+
+      } else {
+
+        neighbors = Stream.of(
+          Optional.of(bottomOf(cell)),
+          cell.toLeft().map(c -> bottomOf(c)),
+          cell.below().map(c -> leftOf(c))
+        );
+      }
+    }
+
+    return neighbors.filter(Optional::isPresent).map(Optional::get);
+  }
 
   public boolean isConnected(Edge that) {
 
@@ -75,5 +140,10 @@ public class Edge {
 
       return false;
     }
+  }
+
+  @Override public String toString() {
+
+    return String.format("Edge(%d,%d,%s)", x(), y(), orientation().name().charAt(0));
   }
 }

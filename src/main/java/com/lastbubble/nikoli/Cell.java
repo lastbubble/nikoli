@@ -1,6 +1,7 @@
 package com.lastbubble.nikoli;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Cell {
 
@@ -28,6 +29,16 @@ public class Cell {
 
   public int x() { return x; }
   public int y() { return y; }
+
+  public Optional<Cell> above() { return validCell(x, y + 1); }
+  public Optional<Cell> toLeft() { return validCell(x - 1, y); }
+  public Optional<Cell> below() { return validCell(x, y - 1); }
+  public Optional<Cell> toRight() { return validCell(x + 1, y); }
+
+  private static Optional<Cell> validCell(int x, int y) {
+
+    return Optional.ofNullable((x >= 0 && y >= 0) ? Cell.at(x, y) : null);
+  }
 
   @Override public int hashCode() { return Objects.hash(x, y); }
 

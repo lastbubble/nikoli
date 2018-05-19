@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public abstract class Formula {
@@ -21,6 +22,18 @@ public abstract class Formula {
   public static AllOf allOf(Formula... targets) { return new AllOf(targets); }
 
   public static AnyOf anyOf(Formula... targets) { return new AnyOf(targets); }
+
+  public static boolean evaluate(Formula formula, Predicate<Formula> truth) {
+    return formula.match(
+      var -> truth.test(var),
+      not -> !evaluate(not.target(), truth),
+      and -> evaluate(and.left(), truth) && evaluate(and.right(), truth),
+      or -> evaluate(or.left(), truth) || evaluate(or.right(), truth),
+      implies -> !evaluate(implies.left(), truth) || evaluate(implies.right(), truth),
+      allOf -> allOf.targets().allMatch(f -> evaluate(f, truth)),
+      anyOf -> anyOf.targets().anyMatch(f -> evaluate(f, truth))
+    );
+  }
 
   private Formula() { }
 

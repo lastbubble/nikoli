@@ -37,6 +37,53 @@ public class CellTest {
     assertThat(cell.y(), is(y));
   }
 
+  @Test public void neighbors_whenCorner() {
+
+    Cell cell = Cell.at(0, 0);
+
+    assertThat(cell.above().get(), is(Cell.at(0, 1)));
+    assertThat(cell.toLeft().isPresent(), is(false));
+    assertThat(cell.below().isPresent(), is(false));
+    assertThat(cell.toRight().get(), is(Cell.at(1, 0)));
+  }
+
+  @Test public void neighbors_whenLeftEdge() {
+
+    int y = positiveNumber();
+
+    Cell cell = Cell.at(0, y);
+
+    assertThat(cell.above().get(), is(Cell.at(0, y + 1)));
+    assertThat(cell.toLeft().isPresent(), is(false));
+    assertThat(cell.below().get(), is(Cell.at(0, y - 1)));
+    assertThat(cell.toRight().get(), is(Cell.at(1, y)));
+  }
+
+  @Test public void neighbors_whenBottomEdge() {
+
+    int x = positiveNumber();
+
+    Cell cell = Cell.at(x, 0);
+
+    assertThat(cell.above().get(), is(Cell.at(x, 1)));
+    assertThat(cell.toLeft().get(), is(Cell.at(x - 1, 0)));
+    assertThat(cell.below().isPresent(), is(false));
+    assertThat(cell.toRight().get(), is(Cell.at(x + 1, 0)));
+  }
+
+  @Test public void neighbors_whenMiddle() {
+
+    int x = positiveNumber();
+    int y = x + 1;
+
+    Cell cell = Cell.at(x, y);
+
+    assertThat(cell.above().get(), is(Cell.at(x, y + 1)));
+    assertThat(cell.toLeft().get(), is(Cell.at(x - 1, y)));
+    assertThat(cell.below().get(), is(Cell.at(x, y - 1)));
+    assertThat(cell.toRight().get(), is(Cell.at(x + 1, y)));
+  }
+
   @Test public void hashCodeImplemented() {
 
     Cell cell = randomCell();

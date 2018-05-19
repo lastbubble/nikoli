@@ -4,6 +4,8 @@ import static com.lastbubble.nikoli.RandomNumbers.*;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import com.lastbubble.nikoli.Cell;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -156,5 +158,24 @@ public class EdgeTest {
         }
       )
       .limit((width * (height + 1)) + (height * (width + 1)));
+  }
+
+  @Test public void edgesForCell() {
+
+    Cell cell = Cell.at(1, 2);
+
+    Edge topEdge = Edge.at(1, 3, Edge.H);
+    Edge leftEdge = Edge.at(1, 2, Edge.V);
+    Edge bottomEdge = Edge.at(1, 2, Edge.H);
+    Edge rightEdge = Edge.at(2, 2, Edge.V);
+
+    assertThat(Edge.topOf(cell), is(topEdge));
+    assertThat(Edge.leftOf(cell), is(leftEdge));
+    assertThat(Edge.bottomOf(cell), is(bottomEdge));
+    assertThat(Edge.rightOf(cell), is(rightEdge));
+
+    assertThat(Edge.edgesOf(cell).collect(Collectors.toList()),
+      contains(topEdge, leftEdge, bottomEdge, rightEdge)
+    );
   }
 }

@@ -63,49 +63,37 @@ public class FormulaTest {
 
   @Test public void evaluateLogicUsingMatch() {
 
-    assertThat(evaluate(t), is(true));
-    assertThat(evaluate(f), is(false));
+    Predicate<Formula> truth = formula -> (formula == t);
 
-    assertThat(evaluate(not(t)), is(false));
-    assertThat(evaluate(not(f)), is(true));
+    assertThat(evaluate(t, truth), is(true));
+    assertThat(evaluate(f, truth), is(false));
 
-    assertThat(evaluate(and(t, t)), is(true));
-    assertThat(evaluate(and(t, f)), is(false));
-    assertThat(evaluate(and(f, t)), is(false));
-    assertThat(evaluate(and(f, f)), is(false));
+    assertThat(evaluate(not(t), truth), is(false));
+    assertThat(evaluate(not(f), truth), is(true));
 
-    assertThat(evaluate(or(t, t)), is(true));
-    assertThat(evaluate(or(t, f)), is(true));
-    assertThat(evaluate(or(f, t)), is(true));
-    assertThat(evaluate(or(f, f)), is(false));
+    assertThat(evaluate(and(t, t), truth), is(true));
+    assertThat(evaluate(and(t, f), truth), is(false));
+    assertThat(evaluate(and(f, t), truth), is(false));
+    assertThat(evaluate(and(f, f), truth), is(false));
 
-    assertThat(evaluate(implies(t, t)), is(true));
-    assertThat(evaluate(implies(t, f)), is(false));
-    assertThat(evaluate(implies(f, t)), is(true));
-    assertThat(evaluate(implies(f, f)), is(true));
+    assertThat(evaluate(or(t, t), truth), is(true));
+    assertThat(evaluate(or(t, f), truth), is(true));
+    assertThat(evaluate(or(f, t), truth), is(true));
+    assertThat(evaluate(or(f, f), truth), is(false));
 
-    assertThat(evaluate(allOf(t, t, t)), is(true));
-    assertThat(evaluate(allOf(t, f, t)), is(false));
+    assertThat(evaluate(implies(t, t), truth), is(true));
+    assertThat(evaluate(implies(t, f), truth), is(false));
+    assertThat(evaluate(implies(f, t), truth), is(true));
+    assertThat(evaluate(implies(f, f), truth), is(true));
 
-    assertThat(evaluate(anyOf(t, f, f)), is(true));
-    assertThat(evaluate(anyOf(f, f, f)), is(false));
+    assertThat(evaluate(allOf(t, t, t), truth), is(true));
+    assertThat(evaluate(allOf(t, f, t), truth), is(false));
+
+    assertThat(evaluate(anyOf(t, f, f), truth), is(true));
+    assertThat(evaluate(anyOf(f, f, f), truth), is(false));
   }
 
-  private boolean evaluate(Formula formula) {
-    return formula.match(
-      var -> (var == t),
-      not -> !evaluate(not.target()),
-      and -> evaluate(and.left()) && evaluate(and.right()),
-      or -> evaluate(or.left()) || evaluate(or.right()),
-      implies -> !evaluate(implies.left()) || evaluate(implies.right()),
-      allOf -> allOf.targets().allMatch(isTrue()),
-      anyOf -> anyOf.targets().anyMatch(isTrue())
-    );
-  }
-
-  private Predicate<Formula> isTrue() { return formula -> evaluate(formula); }
-
-  private static final Formula t = var(true);;
+  private static final Formula t = var(true);
   private static final Formula f = var(false);
 
   private static final Formula formula1 = mock(Formula.class, "formula1");
