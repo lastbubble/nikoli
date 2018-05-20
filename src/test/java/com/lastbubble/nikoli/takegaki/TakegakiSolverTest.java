@@ -64,7 +64,7 @@ public class TakegakiSolverTest {
     System.out.println("\nPUZZLE\n======");
     new SolutionPrinter(grid, Stream.<Edge>of()).print();
 
-    if(true) solver.solve(solutionVars -> {
+    solver.solve(solutionVars -> {
       System.out.println("\nSOLUTION\n========");
       new SolutionPrinter(grid, solutionVars.map(var -> (Edge) var.data())).print();
     });

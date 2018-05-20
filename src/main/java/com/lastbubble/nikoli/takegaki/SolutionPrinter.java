@@ -57,12 +57,6 @@ public class SolutionPrinter {
 
   private char charForDot(int x, int y) {
 
-    // dot = (2, 1)
-    // top = (2, 1, V)
-    // left = (1, 1, H)
-    // bottom = (2, 0, V)
-    // right = (2, 1, H)
-
     boolean topInPath = pathEdges.contains(Edge.at(x, y, Edge.V));
     boolean leftInPath = (x > 0) && pathEdges.contains(Edge.at(x - 1, y, Edge.H));
     boolean bottomInPath = (y > 0) && pathEdges.contains(Edge.at(x, y - 1, Edge.V));
