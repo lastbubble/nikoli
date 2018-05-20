@@ -5,8 +5,9 @@ import com.lastbubble.nikoli.logic.Formula.Var;
 import com.lastbubble.nikoli.logic.VarSet;
 
 import java.util.Arrays;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
@@ -49,19 +50,23 @@ public class Solver {
     );
   }
 
-  public void solve(Consumer<Stream<Var>> consumer) {
+  public void solve(Consumer<Set<Var>> consumer) {
 
     int[] model = findModel();
 
     while (model != null) {
 
-      consumer.accept(solutionFor(model));
+      Set<Var> solution = solutionFor(model);
+
+      if (acceptable(solution)) { consumer.accept(solution); }
 
       excludeClause(model);
 
       model = findModel();
     }
   }
+
+  protected boolean acceptable(Set<Var> solution) { return true; }
 
   private int[] findModel() {
 
@@ -79,9 +84,9 @@ public class Solver {
     catch (Exception e) { throw new RuntimeException("Failed to exclude clause: " + e, e); }
   }
 
-  private Stream<Var> solutionFor(int[] model) {
+  private Set<Var> solutionFor(int[] model) {
 
-    return Arrays.stream(model).filter(n -> n > 0).mapToObj(vars::varFor);
+    return Arrays.stream(model).filter(n -> n > 0).mapToObj(vars::varFor).collect(Collectors.toSet());
   }
 
   private static RuntimeException illegalFormula() { return new IllegalArgumentException("Illegal formula!"); }

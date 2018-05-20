@@ -7,7 +7,9 @@ import com.lastbubble.nikoli.Grid;
 import com.lastbubble.nikoli.logic.Formula;
 import com.lastbubble.nikoli.solver.Solver;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -158,5 +160,49 @@ public class TakegakiSolver extends Solver {
       int yMax = (o == Edge.H) ? grid.height() : grid.height() - 1;
       return (x >= 0 && x <= xMax && y >= 0 && y <= yMax);
     };
+  }
+
+  @Override protected boolean acceptable(Set<Var> solutionVars) {
+
+    Set<Edge> pathEdges = solutionVars.stream().map(var -> (Edge) var.data()).collect(Collectors.toSet());
+
+    Edge firstEdge = pathEdges.stream().findFirst().orElse(null);
+
+    if (firstEdge != null) {
+
+      List<Edge> path = new ArrayList<>();
+
+      Edge currentEdge = firstEdge;
+
+      pathEdges.remove(currentEdge);
+
+      while (pathEdges.size() > 0) {
+
+        path.add(currentEdge);
+
+        Edge nextEdge = findConnectedEdge(currentEdge, pathEdges);
+
+        if (nextEdge == null) {
+
+          add(anyOf(path.stream().map(vars::add).map(v -> not(v))));
+          return false;
+        }
+
+        pathEdges.remove(nextEdge);
+
+        if (pathEdges.isEmpty()) { return nextEdge.isConnected(firstEdge); }
+
+        currentEdge = nextEdge;
+      }
+    }
+
+    return false;
+  }
+
+  private Edge findConnectedEdge(Edge edge, Set<Edge> edges) {
+
+    for (Edge e : edges) { if (edge.isConnected(e)) { return e; } }
+
+    return null;
   }
 }

@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Formula {
@@ -21,7 +22,9 @@ public abstract class Formula {
 
   public static AllOf allOf(Formula... targets) { return new AllOf(targets); }
 
-  public static AnyOf anyOf(Formula... targets) { return new AnyOf(targets); }
+  public static AnyOf anyOf(Formula... targets) { return new AnyOf(asList(targets)); }
+
+  public static AnyOf anyOf(Stream<Formula> targets) { return new AnyOf(targets.collect(Collectors.toList())); }
 
   public static boolean evaluate(Formula formula, Predicate<Formula> truth) {
     return formula.match(
@@ -185,7 +188,7 @@ public abstract class Formula {
 
     public Stream<Formula> targets() { return targets.stream(); }
 
-    private AnyOf(Formula... targets) { this.targets = asList(targets); }
+    private AnyOf(List<Formula> targets) { this.targets = targets; }
 
     @Override public <T> T match(
       Function<Var, T> var,

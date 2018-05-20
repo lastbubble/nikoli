@@ -19,7 +19,7 @@ public class Main {
 
     solver.solve(solutionVars -> {
       System.out.println("\nSOLUTION\n========");
-      new SolutionPrinter(grid, solutionVars.map(var -> (Edge) var.data())).print();
+      new SolutionPrinter(grid, solutionVars.stream().map(var -> (Edge) var.data())).print();
     });
   }
 }
