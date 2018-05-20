@@ -26,11 +26,7 @@ public class SolutionPrinter {
   public void print() {
 
     // first line
-    buf.append(DOT);
-    IntStream.range(0, grid.width()).forEach(x ->
-      buf.append(pathEdges.contains(Edge.at(x, grid.height(), Edge.H)) ? '-' : ' ').append(DOT)
-    );
-    printLine();
+    printDotLine(grid.height());
 
     for (int y = grid.height() - 1; y >= 0; y--) {
 
@@ -44,17 +40,56 @@ public class SolutionPrinter {
       buf.append(charForEdge(Edge.at(grid.width(), y, Edge.V)));
       printLine();
 
-      buf.append(DOT);
-      IntStream.range(0, grid.width()).forEach(x ->
-        buf.append(charForEdge(Edge.at(x, row, Edge.H))).append(DOT)
-      );
-      printLine();
+      printDotLine(row);
     }
+  }
+
+  private void printDotLine(int y) {
+
+    buf.append(charForDot(0, y));
+    IntStream.range(0, grid.width()).forEach(x ->
+      buf
+        .append(charForEdge(Edge.at(x, y, Edge.H)))
+        .append(charForDot(x + 1, y))
+    );
+    printLine();
+  }
+
+  private char charForDot(int x, int y) {
+
+    // dot = (2, 1)
+    // top = (2, 1, V)
+    // left = (1, 1, H)
+    // bottom = (2, 0, V)
+    // right = (2, 1, H)
+
+    boolean topInPath = pathEdges.contains(Edge.at(x, y, Edge.V));
+    boolean leftInPath = (x > 0) && pathEdges.contains(Edge.at(x - 1, y, Edge.H));
+    boolean bottomInPath = (y > 0) && pathEdges.contains(Edge.at(x, y - 1, Edge.V));
+    boolean rightInPath = pathEdges.contains(Edge.at(x, y, Edge.H));
+
+    if (topInPath) {
+
+      if (leftInPath) { return '\u255D'; }
+      else if (bottomInPath) { return '\u2551'; }
+      else if (rightInPath) { return '\u255A'; }
+
+    } else if (leftInPath) {
+
+      if (bottomInPath) { return '\u2557'; }
+      else if (rightInPath) { return '\u2550'; }
+
+    } else if (bottomInPath && rightInPath) {
+
+      return '\u2554';
+    }
+
+    return DOT;
   }
 
   private char charForEdge(Edge edge) {
 
-    return pathEdges.contains(edge) ? (edge.orientation() == Edge.H ? '-' : '|') : ' ';
+    return pathEdges.contains(edge) ? (edge.orientation() == Edge.H ? '\u2550' : '\u2551') : ' ';
   }
 
   private char charForCell(Cell cell) {
