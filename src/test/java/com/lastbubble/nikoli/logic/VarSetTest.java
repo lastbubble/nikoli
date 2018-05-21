@@ -13,7 +13,7 @@ public class VarSetTest {
 
   @Rule public ExpectedException thrown = ExpectedException.none();
 
-  private final VarSet vars = new VarSet();
+  private final VarSet<String> vars = new VarSet<String>();
 
   @Test public void add_requiresNonNullData() {
 
@@ -24,22 +24,20 @@ public class VarSetTest {
 
   @Test public void add_sameVarForSameData() {
 
-    Object data = new Object();
+    String data = "data";
 
     assertThat(vars.add(data), is(sameInstance(vars.add(data))));
   }
 
   @Test public void add_sameVarForEqualData() {
 
-    String data = "test";
-
-    assertThat(vars.add(data), is(sameInstance(vars.add(data))));
+    assertThat(vars.add("data"), is(sameInstance(vars.add("data"))));
   }
 
   @Test public void add_differentVarsForDifferentData() {
 
-    Object data1 = new Object();
-    Object data2 = new Object();
+    String data1 = "data1";
+    String data2 = "data2";
 
     assertThat(vars.add(data1), is(not(vars.add(data2))));
   }
@@ -55,16 +53,16 @@ public class VarSetTest {
 
     thrown.expect(IllegalArgumentException.class);
 
-    Var var = var("test");
+    Var<String> var = var("test");
 
     vars.idFor(var);
   }
 
   @Test public void idFor_registeredVar() {
 
-    Object data = "test";
+    String data = "data";
 
-    Var var = vars.add(data);
+    Var<String> var = vars.add(data);
 
     assertThat(vars.idFor(var), is(1));
 
@@ -73,8 +71,8 @@ public class VarSetTest {
 
   @Test public void idFor_differentVars() {
 
-    Var var1 = vars.add("a");
-    Var var2 = vars.add("b");
+    Var<String> var1 = vars.add("a");
+    Var<String> var2 = vars.add("b");
 
     assertThat(vars.idFor(var1), is(1));
     assertThat(vars.idFor(var2), is(2));
@@ -96,8 +94,8 @@ public class VarSetTest {
 
   @Test public void varFor_registeredId() {
 
-    Var var1 = vars.add("a");
-    Var var2 = vars.add("b");
+    Var<String> var1 = vars.add("a");
+    Var<String> var2 = vars.add("b");
 
     assertThat(vars.varFor(vars.idFor(var1)), is(var1));
     assertThat(vars.varFor(vars.idFor(var2)), is(var2));
@@ -105,8 +103,8 @@ public class VarSetTest {
 
   @Test public void varFor_negativeId() {
 
-    Var var1 = vars.add("a");
-    Var var2 = vars.add("b");
+    Var<String> var1 = vars.add("a");
+    Var<String> var2 = vars.add("b");
 
     assertThat(vars.varFor(-vars.idFor(var1)), is(var1));
     assertThat(vars.varFor(-vars.idFor(var2)), is(var2));

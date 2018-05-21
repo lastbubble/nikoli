@@ -7,17 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VarSet {
+public class VarSet<T> {
 
-  private final Map<Object, Var> varsByData = new HashMap<>();
-  private final Map<Var, Integer> idsByVar = new HashMap<>();
-  private final List<Var> vars = new ArrayList<>();
+  private final Map<T, Var<T>> varsByData = new HashMap<>();
+  private final Map<Var<T>, Integer> idsByVar = new HashMap<>();
+  private final List<Var<T>> vars = new ArrayList<>();
 
-  public Var add(Object data) {
+  public Var<T> add(T data) {
 
     checkArgument(data != null, "Data cannot be null");
 
-    Var var = varsByData.get(data);
+    Var<T> var = varsByData.get(data);
 
     if (var == null) {
 
@@ -30,7 +30,7 @@ public class VarSet {
     return var;
   }
 
-  public int idFor(Var var) {
+  public int idFor(Var<?> var) {
 
     checkArgument(var != null, "Var cannot be null");
 
@@ -39,7 +39,7 @@ public class VarSet {
     return idsByVar.get(var);
   }
 
-  public Var varFor(int id) {
+  public Var<T> varFor(int id) {
 
     checkArgument(id != 0, "Illegal id");
 

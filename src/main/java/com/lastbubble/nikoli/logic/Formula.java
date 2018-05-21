@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public abstract class Formula {
 
-  public static Var var(Object data) { return new Var(data); }
+  public static <T> Var<T> var(T data) { return new Var<T>(data); }
 
   public static Not not(Formula target) { return new Not(target); }
 
@@ -41,7 +41,7 @@ public abstract class Formula {
   private Formula() { }
 
   public abstract <T> T match(
-    Function<Var, T> var,
+    Function<Var<?>, T> var,
     Function<Not, T> not,
     Function<And, T> and,
     Function<Or, T> or,
@@ -50,16 +50,16 @@ public abstract class Formula {
     Function<AnyOf, T> anyOf
   );
 
-  public static class Var extends Formula {
+  public static class Var<T> extends Formula {
 
-    private final Object data;
+    private final T data;
 
-    private Var(Object data) { this.data = data; }
+    private Var(T data) { this.data = data; }
 
-    public Object data() { return data; }
+    public T data() { return data; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -80,7 +80,7 @@ public abstract class Formula {
     private Not(Formula target) { this.target = target; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -103,7 +103,7 @@ public abstract class Formula {
     private And(Formula left, Formula right) { this.left = left; this.right = right; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -126,7 +126,7 @@ public abstract class Formula {
     private Or(Formula left, Formula right) { this.left = left; this.right = right; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -149,7 +149,7 @@ public abstract class Formula {
     private Implies(Formula left, Formula right) { this.left = left; this.right = right; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -170,7 +170,7 @@ public abstract class Formula {
     private AllOf(Formula... targets) { this.targets = asList(targets); }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,
@@ -191,7 +191,7 @@ public abstract class Formula {
     private AnyOf(List<Formula> targets) { this.targets = targets; }
 
     @Override public <T> T match(
-      Function<Var, T> var,
+      Function<Var<?>, T> var,
       Function<Not, T> not,
       Function<And, T> and,
       Function<Or, T> or,

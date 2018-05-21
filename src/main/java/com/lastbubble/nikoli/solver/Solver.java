@@ -8,15 +8,18 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.ISolver;
 
-public class Solver {
+public class Solver<T> {
 
   private final ISolver solver = SolverFactory.instance().defaultSolver();
-  protected final VarSet vars = new VarSet();
+  private final VarSet<T> vars = new VarSet<T>();
+
+  protected Var<T> varFor(T data) { return vars.add(data); }
 
   public void add(Formula formula) {
 
@@ -50,15 +53,15 @@ public class Solver {
     );
   }
 
-  public void solve(Consumer<Set<Var>> consumer) {
+  public void solve(Consumer<Set<T>> consumer) {
 
     int[] model = findModel();
 
     while (model != null) {
 
-      Set<Var> solution = solutionFor(model);
+      Set<T> solution = solutionFor(model);
 
-      if (acceptable(solution)) { consumer.accept(solution); }
+      if (acceptable(solution.stream())) { consumer.accept(solution); }
 
       excludeClause(model);
 
@@ -66,7 +69,7 @@ public class Solver {
     }
   }
 
-  protected boolean acceptable(Set<Var> solution) { return true; }
+  protected boolean acceptable(Stream<T> solution) { return true; }
 
   private int[] findModel() {
 
@@ -84,9 +87,13 @@ public class Solver {
     catch (Exception e) { throw new RuntimeException("Failed to exclude clause: " + e, e); }
   }
 
-  private Set<Var> solutionFor(int[] model) {
+  private Set<T> solutionFor(int[] model) {
 
-    return Arrays.stream(model).filter(n -> n > 0).mapToObj(vars::varFor).collect(Collectors.toSet());
+    return Arrays.stream(model)
+      .filter(n -> n > 0)
+      .mapToObj(vars::varFor)
+      .map(Var::data)
+      .collect(Collectors.toSet());
   }
 
   private static RuntimeException illegalFormula() { return new IllegalArgumentException("Illegal formula!"); }

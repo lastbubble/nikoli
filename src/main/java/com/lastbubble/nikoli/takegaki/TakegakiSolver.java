@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TakegakiSolver extends Solver {
+public class TakegakiSolver extends Solver<Edge> {
 
   private final Grid<Integer> grid;
 
@@ -36,16 +36,16 @@ public class TakegakiSolver extends Solver {
 
   private Formula edgeConnectionsFor(Edge edge, boolean forward) {
 
-    List<Var> neighborVars = edge.neighbors(forward)
+    List<Var<Edge>> neighborVars = edge.neighbors(forward)
       .filter(validEdge())
-      .map(e -> vars.add(e))
+      .map(this::varFor)
       .collect(Collectors.toList());
 
-    Var a = vars.add(edge);
+    Var<Edge> a = varFor(edge);
 
     if (neighborVars.size() == 1) {
 
-      Var b = neighborVars.get(0);
+      Var<Edge> b = neighborVars.get(0);
 
       // (a => b) & (b => a)
       return allOf(
@@ -55,8 +55,8 @@ public class TakegakiSolver extends Solver {
 
     } else if (neighborVars.size() == 2) {
 
-      Var b = neighborVars.get(0);
-      Var c = neighborVars.get(1);
+      Var<Edge> b = neighborVars.get(0);
+      Var<Edge> c = neighborVars.get(1);
 
       // a => ((b & ~c) | (~b & c))
       return allOf(
@@ -66,9 +66,9 @@ public class TakegakiSolver extends Solver {
 
     } else {
 
-      Var b = neighborVars.get(0);
-      Var c = neighborVars.get(1);
-      Var d = neighborVars.get(2);
+      Var<Edge> b = neighborVars.get(0);
+      Var<Edge> c = neighborVars.get(1);
+      Var<Edge> d = neighborVars.get(2);
 
       // a => ((b & ~c & ~d) | (~b & c & ~d) | (~b & ~c & d))
       return allOf(
@@ -82,11 +82,11 @@ public class TakegakiSolver extends Solver {
 
   private Formula pathEdgesForCell(Cell cell, int count) {
 
-    List<Var> edgeVars = Edge.edgesOf(cell).map(e -> vars.add(e)).collect(Collectors.toList());
-    Var a = edgeVars.get(0);
-    Var b = edgeVars.get(1);
-    Var c = edgeVars.get(2);
-    Var d = edgeVars.get(3);
+    List<Var<Edge>> edgeVars = Edge.edgesOf(cell).map(this::varFor).collect(Collectors.toList());
+    Var<Edge> a = edgeVars.get(0);
+    Var<Edge> b = edgeVars.get(1);
+    Var<Edge> c = edgeVars.get(2);
+    Var<Edge> d = edgeVars.get(3);
 
     switch (count) {
 
@@ -162,9 +162,9 @@ public class TakegakiSolver extends Solver {
     };
   }
 
-  @Override protected boolean acceptable(Set<Var> solutionVars) {
+  @Override protected boolean acceptable(Stream<Edge> solution) {
 
-    Set<Edge> pathEdges = solutionVars.stream().map(var -> (Edge) var.data()).collect(Collectors.toSet());
+    Set<Edge> pathEdges = solution.collect(Collectors.toSet());
 
     Edge firstEdge = pathEdges.stream().findFirst().orElse(null);
 
@@ -184,7 +184,7 @@ public class TakegakiSolver extends Solver {
 
         if (nextEdge == null) {
 
-          add(anyOf(path.stream().map(vars::add).map(v -> not(v))));
+          add(anyOf(path.stream().map(this::varFor).map(Formula::not)));
           return false;
         }
 

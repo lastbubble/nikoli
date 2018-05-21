@@ -12,14 +12,14 @@ public class Main {
 
     Grid<Integer> grid = new TakegakiReader().read(Paths.get(args[0]));
 
-    Solver solver = new TakegakiSolver(grid);
+    Solver<Edge> solver = new TakegakiSolver(grid);
 
     System.out.println("\nPUZZLE\n======");
     new SolutionPrinter(grid, Stream.<Edge>of()).print();
 
-    solver.solve(solutionVars -> {
+    solver.solve(pathEdges -> {
       System.out.println("\nSOLUTION\n========");
-      new SolutionPrinter(grid, solutionVars.stream().map(var -> (Edge) var.data())).print();
+      new SolutionPrinter(grid, pathEdges.stream()).print();
     });
   }
 }

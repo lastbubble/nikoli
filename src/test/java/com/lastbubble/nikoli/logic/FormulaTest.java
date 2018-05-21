@@ -16,9 +16,9 @@ public class FormulaTest {
 
   @Test public void assignVar() {
 
-    Object data = new Object();
+    String data = "data";
 
-    Var var = var(data);
+    Var<String> var = var(data);
 
     assertThat(var.data(), is(sameInstance(data)));
   }
