@@ -7,7 +7,6 @@ import com.lastbubble.nikoli.Grid;
 import com.lastbubble.nikoli.logic.Formula;
 import com.lastbubble.nikoli.solver.Solver;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -164,45 +163,17 @@ public class TakegakiSolver extends Solver<Edge> {
 
   @Override protected boolean acceptable(Stream<Edge> solution) {
 
-    Set<Edge> pathEdges = solution.collect(Collectors.toSet());
+    Set<Edge> edgeSet = solution.collect(Collectors.toSet());
 
-    Edge firstEdge = pathEdges.stream().findFirst().orElse(null);
+    List<List<Edge>> loops = Loops.findLoopsIn(edgeSet.stream());
 
-    if (firstEdge != null) {
+    if (loops.size() == 1 && loops.get(0).size() == edgeSet.size()) { return true; }
 
-      List<Edge> path = new ArrayList<>();
+    for (List<Edge> invalidLoop : loops) {
 
-      Edge currentEdge = firstEdge;
-
-      pathEdges.remove(currentEdge);
-
-      while (pathEdges.size() > 0) {
-
-        path.add(currentEdge);
-
-        Edge nextEdge = findConnectedEdge(currentEdge, pathEdges);
-
-        if (nextEdge == null) {
-
-          add(anyOf(path.stream().map(this::varFor).map(Formula::not)));
-          return false;
-        }
-
-        pathEdges.remove(nextEdge);
-
-        if (pathEdges.isEmpty()) { return nextEdge.isConnected(firstEdge); }
-
-        currentEdge = nextEdge;
-      }
+      add(anyOf(invalidLoop.stream().map(this::varFor).map(Formula::not)));
     }
 
     return false;
-  }
-
-  private Edge findConnectedEdge(Edge edge, Set<Edge> edges) {
-
-    for (Edge e : edges) { if (edge.isConnected(e)) { return e; } }
-
-    return null;
   }
 }
