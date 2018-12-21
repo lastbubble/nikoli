@@ -20,5 +20,9 @@ The rules for Takegaki (more commonly known as Slitherlink) can be found [here](
 where `puzzle_file` is a text file encoding a Takegaki puzzle. Each row of the puzzle is represented by a comma-delimited
 line of cell values: 0, 1, 2, 3 or space (unspecified).
 
+During development, e.g.:
+
+```gradle run -PappArgs="['puzzles/takegaki/puzzle1.txt']"```
+
 ### References
 * David Westreicher. Slitherlink Reloaded, 2011. https://david-westreicher.github.io/static/papers/ba-thesis.pdf
