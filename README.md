@@ -22,7 +22,7 @@ line of cell values: 0, 1, 2, 3 or space (unspecified).
 
 During development, e.g.:
 
-```gradle run -PappArgs="['puzzles/takegaki/puzzle1.txt']"```
+```gradle run -PappArgs="['takegaki', 'puzzles/takegaki/puzzle1.txt']"```
 
 ### References
 * David Westreicher. Slitherlink Reloaded, 2011. https://david-westreicher.github.io/static/papers/ba-thesis.pdf

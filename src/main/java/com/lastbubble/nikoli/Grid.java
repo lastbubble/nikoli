@@ -32,6 +32,8 @@ public class Grid<V> {
       .limit(width() * height());
   }
 
+  public Stream<Cell> filledCells() { return values.keySet().stream(); }
+
   public Optional<V> valueAt(Cell cell) { return Optional.ofNullable(values.get(cell)); }
 
   public static <V> Builder<V> builder() { return new Builder<V>(); }
