@@ -1,11 +1,14 @@
 package com.lastbubble.nikoli.takegaki;
 
+import static com.lastbubble.nikoli.RasterMatcher.matchesLines;
+import static org.junit.Assert.assertThat;
+
 import com.lastbubble.nikoli.Cell;
 import com.lastbubble.nikoli.Grid;
 
 import org.junit.Test;
 
-public class TakegakiPuzzleTest extends TakegakiTestBase {
+public class TakegakiPuzzleTest {
 
   private final TakegakiPuzzle puzzle = new TakegakiPuzzle(
     Grid.<Integer>builder()
@@ -18,14 +21,15 @@ public class TakegakiPuzzleTest extends TakegakiTestBase {
 
   @Test public void toRaster() {
 
-    assertRasterLinesAre(puzzle.toRaster(),
-      "x x x x",
-      " 0   1 ",
-      "x x x x",
-      "   2   ",
-      "x x x x",
-      "     3 ",
-      "x x x x"
+    assertThat(puzzle.toRaster(), matchesLines(
+        ". . . .",
+        " 0   1 ",
+        ". . . .",
+        "   2   ",
+        ". . . .",
+        "     3 ",
+        ". . . ."
+      )
     );
   }
 }

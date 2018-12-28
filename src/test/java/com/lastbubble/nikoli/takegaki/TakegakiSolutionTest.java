@@ -1,5 +1,6 @@
 package com.lastbubble.nikoli.takegaki;
 
+import static com.lastbubble.nikoli.RasterMatcher.matchesLines;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 
@@ -13,7 +14,7 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-public class TakegakiSolutionTest extends TakegakiTestBase {
+public class TakegakiSolutionTest {
 
   private final Puzzle<Integer> puzzle = new TakegakiPuzzle(
     Grid.<Integer>builder()
@@ -53,14 +54,15 @@ public class TakegakiSolutionTest extends TakegakiTestBase {
 
   @Test public void toRaster() {
 
-    assertRasterLinesAre(solution.toRaster(),
-      "r---7 x",
-      "|2 3|  ",
-      "| r-] x",
-      "| |3   ",
-      "| L---7",
-      "|2   3|",
-      "L-----]"
+    assertThat(solution.toRaster(), matchesLines(
+        "r===7 .",
+        "H2 3H  ",
+        "H r=] .",
+        "H H3   ",
+        "H L===7",
+        "H2   3H",
+        "L=====]"
+      )
     );
   }
 }
