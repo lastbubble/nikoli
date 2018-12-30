@@ -1,5 +1,7 @@
 package com.lastbubble.nikoli;
 
+import com.lastbubble.nikoli.hashiwokakero.Bridge;
+import com.lastbubble.nikoli.hashiwokakero.Hashiwokakero;
 import com.lastbubble.nikoli.takegaki.Edge;
 import com.lastbubble.nikoli.takegaki.Takegaki;
 
@@ -30,6 +32,22 @@ public class Main {
 
       out.println("\nSOLUTION\n========");
       for (Solution<Integer, Edge> solution : solutions) {
+        solution.toRaster().printTo(out);
+      }
+
+    } else if (type.equals("hashiwokakero")) {
+
+      PuzzleFactory<Integer, Bridge> hashiwokakero = new Hashiwokakero();
+
+      Puzzle<Integer> puzzle = hashiwokakero.read(reader);
+
+      out.println("\nPUZZLE\n======");
+      puzzle.toRaster().printTo(out);
+
+      Iterable<? extends Solution<Integer, Bridge>> solutions = hashiwokakero.solve(puzzle);
+
+      out.println("\nSOLUTION\n========");
+      for (Solution<Integer, Bridge> solution : solutions) {
         solution.toRaster().printTo(out);
       }
     }

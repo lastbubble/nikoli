@@ -53,6 +53,12 @@ public class Solver<T> {
     );
   }
 
+  public void addExactly(int n, Stream<T> elements) {
+
+    try { solver.addExactly( new VecInt(elements.mapToInt(f -> toId(varFor(f))).toArray()), n); }
+    catch (Exception e) { throw new RuntimeException("Failed to add exactly: " + e, e); }
+  }
+
   public void solve(Consumer<Set<T>> consumer) {
 
     int[] model = findModel();
@@ -61,7 +67,7 @@ public class Solver<T> {
 
       Set<T> solution = solutionFor(model);
 
-      if (acceptable(solution.stream())) { consumer.accept(solution); }
+      if (acceptable(solution.stream())) { consumer.accept(canonicalize(solution)); }
 
       excludeClause(model);
 
@@ -70,6 +76,8 @@ public class Solver<T> {
   }
 
   protected boolean acceptable(Stream<T> solution) { return true; }
+
+  protected Set<T> canonicalize(Set<T> solution) { return solution; }
 
   private int[] findModel() {
 

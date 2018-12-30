@@ -1,7 +1,7 @@
 package com.lastbubble.nikoli.hashiwokakero;
 
 import static com.lastbubble.nikoli.RandomNumbers.*;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -19,8 +19,6 @@ public class BridgeTest {
   @Rule public ExpectedException thrown = ExpectedException.none();
 
   private Bridge bridge;
-
-  private static final Cell end = Cell.at(naturalNumber(), naturalNumber());
 
   @Test public void invalid_sameCell() {
 
@@ -54,7 +52,7 @@ public class BridgeTest {
 
   @Test public void span_whenVertical() {
 
-    Cell otherEnd = Cell.at(end.x(), naturalNumberOtherThan(end.y()));
+    Cell otherEnd = cellInSameColumn();
 
     whenConnectingTo(otherEnd);
 
@@ -72,7 +70,7 @@ public class BridgeTest {
 
   @Test public void span_whenHorizontal() {
 
-    Cell otherEnd = Cell.at(naturalNumberOtherThan(end.x()), end.y());
+    Cell otherEnd = cellInSameRow();
 
     whenConnectingTo(otherEnd);
 
@@ -88,8 +86,47 @@ public class BridgeTest {
     assertThat(spannedCells, is(reverseBridge.span().collect(Collectors.toList())));
   }
 
+  @Test public void hashCodeImplemented() {
+
+    Cell otherEnd = cellInSameRow();
+
+    whenConnectingTo(otherEnd);
+
+    assertThat(bridge.hashCode(), is(Bridge.connecting(end, otherEnd).hashCode()));
+  }
+
+  @Test public void equalsImplemented() {
+
+    Cell otherEnd = cellInSameRow();
+    Cell anotherEndInSameRow = Cell.at(end.x() + otherEnd.x() + 1, end.y());
+
+    whenConnectingTo(otherEnd);
+
+    assertThat(bridge, equalTo(bridge));
+    assertThat(bridge, not(equalTo( new Object())));
+    assertThat(bridge, not(equalTo(Bridge.connecting(end, cellInSameColumn()))));
+    assertThat(bridge, not(equalTo(Bridge.connecting(end, anotherEndInSameRow))));
+    assertThat(bridge, not(equalTo(bridge.incrementWeight())));
+    assertThat(bridge, equalTo(Bridge.connecting(end, otherEnd)));
+    assertThat(bridge, equalTo(Bridge.connecting(otherEnd, end)));
+  }
+
+  @Test public void toStringImplemented() {
+
+    bridge = Bridge.connecting(Cell.at(0, 1), Cell.at(0, 3));
+
+    assertThat(bridge.toString(), is("Bridge[(0,1)-(0,3)]"));
+    assertThat(bridge.incrementWeight().toString(), is("Bridge[(0,1)=(0,3)]"));
+  }
+
   private void whenConnectingTo(Cell otherEnd) {
 
     bridge = Bridge.connecting(end, otherEnd);
   }
+
+  private static final Cell end = Cell.at(naturalNumber(), naturalNumber());
+
+  private static Cell cellInSameRow() { return Cell.at(naturalNumberOtherThan(end.x()), end.y()); }
+
+  private static Cell cellInSameColumn() { return Cell.at(end.x(), naturalNumberOtherThan(end.y())); }
 }

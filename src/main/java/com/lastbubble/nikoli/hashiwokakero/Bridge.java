@@ -2,6 +2,7 @@ package com.lastbubble.nikoli.hashiwokakero;
 
 import com.lastbubble.nikoli.Cell;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -48,7 +49,38 @@ public class Bridge {
     return cells;
   }
 
+  public Cell oneEnd() { return end1.compareTo(end2) < 0 ? end1 : end2; }
+
+  public Cell otherEnd() { return end1.compareTo(end2) > 0 ? end1 : end2; }
+
   public int weight() { return weight; }
+
+  @Override public int hashCode() { return Objects.hash(oneEnd(), otherEnd(), weight); }
+
+  @Override public boolean equals(Object obj) {
+
+    if (obj == this) { return true; }
+
+    if (obj instanceof Bridge) {
+
+      Bridge that = (Bridge) obj;
+
+      return (
+        this.oneEnd().equals(that.oneEnd()) &&
+        this.otherEnd().equals(that.otherEnd()) &&
+        this.weight() == that.weight()
+      );
+    }
+
+    return false;
+  }
+
+  @Override public String toString() {
+
+    return String.format("Bridge[(%d,%d)%s(%d,%d)]",
+      oneEnd().x(), oneEnd().y(), (weight > 1) ? '=' : '-', otherEnd().x(), otherEnd().y()
+    );
+  }
 
   public Bridge incrementWeight() {
 

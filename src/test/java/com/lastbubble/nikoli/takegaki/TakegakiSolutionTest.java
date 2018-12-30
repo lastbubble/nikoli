@@ -1,12 +1,9 @@
 package com.lastbubble.nikoli.takegaki;
 
 import static com.lastbubble.nikoli.RasterMatcher.matchesLines;
+import static com.lastbubble.nikoli.ReaderHelper.readerFrom;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
-
-import com.lastbubble.nikoli.Cell;
-import com.lastbubble.nikoli.Grid;
-import com.lastbubble.nikoli.Puzzle;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,14 +13,11 @@ import org.junit.Test;
 
 public class TakegakiSolutionTest {
 
-  private final Puzzle<Integer> puzzle = new TakegakiPuzzle(
-    Grid.<Integer>builder()
-      .assign(Cell.at(0, 0), 2)
-      .assign(Cell.at(1, 0), 3)
-      .assign(Cell.at(1, 1), 3)
-      .assign(Cell.at(0, 2), 2)
-      .assign(Cell.at(2, 2), 3)
-      .build()
+  private final TakegakiPuzzle puzzle = new Takegaki().read(readerFrom(
+      "2,3, ",
+      " ,3, ",
+      "2, ,3"
+    )
   );
 
   private final Set<Edge> elements = Stream.of(

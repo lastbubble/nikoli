@@ -1,4 +1,4 @@
-package com.lastbubble.nikoli.takegaki;
+package com.lastbubble.nikoli.hashiwokakero;
 
 import com.lastbubble.nikoli.Cell;
 import com.lastbubble.nikoli.Grid;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Takegaki implements PuzzleFactory<Integer, Edge> {
+public class Hashiwokakero implements PuzzleFactory<Integer, Bridge> {
 
-  @Override public TakegakiPuzzle read(BufferedReader reader) {
+  @Override public HashiwokakeroPuzzle read(BufferedReader reader) {
 
     Grid.Builder<Integer> builder = Grid.<Integer>builder();
 
@@ -36,21 +36,21 @@ public class Takegaki implements PuzzleFactory<Integer, Edge> {
       }
     }
 
-    return new TakegakiPuzzle(builder.build());
+    return new HashiwokakeroPuzzle(builder.build());
   }
 
-  @Override public Iterable<? extends Solution<Integer, Edge>> solve(Puzzle<Integer> puzzle) {
+  @Override public Iterable<? extends Solution<Integer, Bridge>> solve(Puzzle<Integer> puzzle) {
 
-    List<TakegakiSolution> solutions = new ArrayList<TakegakiSolution>();
+    List<HashiwokakeroSolution> solutions = new ArrayList<HashiwokakeroSolution>();
 
-    Solver<Edge> solver = new TakegakiSolver(puzzle.grid());
+    Solver<Bridge> solver = new HashiwokakeroSolver(puzzle.grid());
 
-    solver.solve(pathEdges -> {
-      solutions.add( new TakegakiSolution(puzzle, pathEdges));
+    solver.solve(bridges -> {
+      solutions.add( new HashiwokakeroSolution(puzzle, bridges));
     });
 
     return solutions;
   }
 
-  private static final Pattern CELL_PATTERN = Pattern.compile("0|1|2|3");
+  private static final Pattern CELL_PATTERN = Pattern.compile("0|1|2|3|4|5|6|7|8");
 }

@@ -84,6 +84,17 @@ public class CellTest {
     assertThat(cell.toRight().get(), is(Cell.at(x + 1, y)));
   }
 
+  @Test public void compareToImplemented() {
+
+    Cell cell = Cell.at(positiveNumber(), positiveNumber());
+
+    assertThat(cell, is(lessThan(Cell.at(cell.x() + 1, cell.y()))));
+    assertThat(cell, is(lessThan(Cell.at(cell.x(), cell.y() + 1))));
+    assertThat(cell.compareTo(Cell.at(cell.x(), cell.y())), is(0));
+    assertThat(Cell.at(cell.x(), cell.y() + 1), is(greaterThan(cell)));
+    assertThat(Cell.at(cell.x() + 1, cell.y()), is(greaterThan(cell)));
+  }
+
   @Test public void hashCodeImplemented() {
 
     Cell cell = randomCell();
