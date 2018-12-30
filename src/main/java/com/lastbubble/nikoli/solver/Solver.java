@@ -1,5 +1,7 @@
 package com.lastbubble.nikoli.solver;
 
+import static com.lastbubble.nikoli.logic.Formula.*;
+
 import com.lastbubble.nikoli.logic.Formula;
 import com.lastbubble.nikoli.logic.Formula.Var;
 import com.lastbubble.nikoli.logic.VarSet;
@@ -26,9 +28,9 @@ public class Solver<T> {
     formula.match(
       var -> { addClause( new int[] { toId(var) }); return true; },
       not -> { addClause( new int[] { toId(not) }); return true; },
-      and -> { throw illegalFormula(); },
-      or -> { throw illegalFormula(); },
-      implies -> { throw illegalFormula(); },
+      and -> { add(allOf(and.left(), and.right())); return true; },
+      or -> { add(anyOf(or.left(), or.right())); return true; },
+      implies -> { add(anyOf(not(implies.left()), implies.right())); return true; },
       allOf -> { allOf.targets().forEach(f -> add(f)); return true; },
       anyOf -> { addClause(anyOf.targets().mapToInt(f -> toId(f)).toArray()); return true; }
     );

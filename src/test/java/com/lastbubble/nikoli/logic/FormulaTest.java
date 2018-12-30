@@ -62,6 +62,13 @@ public class FormulaTest {
     assertThat(allOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
   }
 
+  @Test public void assignAllOfUsingStream() {
+
+    AllOf allOf = allOf(Stream.of(formula1, formula2, formula3));
+
+    assertThat(allOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
+  }
+
   @Test public void assignAnyOf() {
 
     AnyOf anyOf = anyOf(formula1, formula2, formula3);

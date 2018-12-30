@@ -36,14 +36,25 @@ public class BridgeTest {
 
   @Test public void initialWeight() {
 
-    whenConnectingTo(Cell.at(end.x(), naturalNumberOtherThan(end.y())));
+    whenConnectingTo(cellInSameColumn());
 
     assertThat(bridge.weight(), is(1));
   }
 
+  @Test public void withWeight() {
+
+    whenConnectingTo(cellInSameColumn());
+
+    int weight = 2;
+    Bridge weightedBridge = bridge.withWeight(weight);
+
+    assertThat(bridge.weight(), is(1));
+    assertThat(weightedBridge.weight(), is(weight));
+  }
+
   @Test public void incrementWeight() {
 
-    whenConnectingTo(Cell.at(end.x(), naturalNumberOtherThan(end.y())));
+    whenConnectingTo(cellInSameColumn());
 
     Bridge otherBridge = bridge.incrementWeight();
 

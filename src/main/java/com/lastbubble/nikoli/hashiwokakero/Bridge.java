@@ -82,8 +82,7 @@ public class Bridge {
     );
   }
 
-  public Bridge incrementWeight() {
+  public Bridge withWeight(int n) { return new Bridge(end1, end2, n); }
 
-    return new Bridge(end1, end2, weight() + 1);
-  }
+  public Bridge incrementWeight() { return withWeight(weight() + 1); }
 }

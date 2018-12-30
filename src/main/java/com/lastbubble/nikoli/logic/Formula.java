@@ -20,7 +20,9 @@ public abstract class Formula {
 
   public static Implies implies(Formula left, Formula right) { return new Implies(left, right); }
 
-  public static AllOf allOf(Formula... targets) { return new AllOf(targets); }
+  public static AllOf allOf(Formula... targets) { return new AllOf(asList(targets)); }
+
+  public static AllOf allOf(Stream<Formula> targets) { return new AllOf(targets.collect(Collectors.toList())); }
 
   public static AnyOf anyOf(Formula... targets) { return new AnyOf(asList(targets)); }
 
@@ -167,7 +169,7 @@ public abstract class Formula {
 
     public Stream<Formula> targets() { return targets.stream(); }
 
-    private AllOf(Formula... targets) { this.targets = asList(targets); }
+    private AllOf(List<Formula> targets) { this.targets = targets; }
 
     @Override public <T> T match(
       Function<Var<?>, T> var,

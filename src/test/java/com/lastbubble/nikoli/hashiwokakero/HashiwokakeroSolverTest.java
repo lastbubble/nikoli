@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import com.lastbubble.nikoli.Cell;
 
-import co.unruly.matchers.StreamMatchers;
 import org.junit.Test;
 
 public class HashiwokakeroSolverTest {
@@ -23,7 +22,7 @@ public class HashiwokakeroSolverTest {
 
   @Test public void allBridges() {
 
-    assertThat(solver.allBridges(), StreamMatchers.contains(
+    assertThat(solver.allBridges(), containsInAnyOrder(
         Bridge.connecting(Cell.at(0, 0), Cell.at(2, 0)),
         Bridge.connecting(Cell.at(0, 0), Cell.at(2, 0)).incrementWeight(),
         Bridge.connecting(Cell.at(0, 0), Cell.at(0, 3)),
