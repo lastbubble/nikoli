@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -59,6 +60,27 @@ public class FormulaTest {
     AllOf allOf = allOf(formula1, formula2, formula3);
 
     assertThat(allOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
+  }
+
+  @Test public void assignAllOfUsingStream() {
+
+    AllOf allOf = allOf(Stream.of(formula1, formula2, formula3));
+
+    assertThat(allOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
+  }
+
+  @Test public void assignAnyOf() {
+
+    AnyOf anyOf = anyOf(formula1, formula2, formula3);
+
+    assertThat(anyOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
+  }
+
+  @Test public void assignAnyOfUsingStream() {
+
+    AnyOf anyOf = anyOf(Stream.of(formula1, formula2, formula3));
+
+    assertThat(anyOf.targets().collect(Collectors.toList()), contains(formula1, formula2, formula3));
   }
 
   @Test public void evaluateLogicUsingMatch() {

@@ -3,7 +3,7 @@ package com.lastbubble.nikoli;
 import java.util.Objects;
 import java.util.Optional;
 
-public class Cell {
+public class Cell implements Comparable<Cell> {
 
   public static Cell at(int x, int y) {
 
@@ -38,6 +38,15 @@ public class Cell {
   private static Optional<Cell> validCell(int x, int y) {
 
     return Optional.ofNullable((x >= 0 && y >= 0) ? Cell.at(x, y) : null);
+  }
+
+  @Override public int compareTo(Cell that) {
+
+    int delta = this.y() - that.y();
+
+    if (delta == 0) { delta = this.x() - that.x(); }
+
+    return delta;
   }
 
   @Override public int hashCode() { return Objects.hash(x, y); }
