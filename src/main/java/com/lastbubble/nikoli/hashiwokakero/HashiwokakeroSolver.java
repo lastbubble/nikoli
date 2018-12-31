@@ -39,30 +39,9 @@ public class HashiwokakeroSolver extends Solver<Bridge> {
 
       if (bridge.weight() > 1) { add(implies(varFor(bridge), varFor(bridge.withWeight(1)))); }
 
-      Stream<Bridge> crossingBridges;
-
-      if (bridge.oneEnd().y() == bridge.otherEnd().y()) {
-
-        crossingBridges = allBridges.stream()
-          .filter(x ->
-            x.oneEnd().y() < bridge.oneEnd().y() &&
-            x.otherEnd().y() > bridge.oneEnd().y() &&
-            x.oneEnd().x() > bridge.oneEnd().x() &&
-            x.oneEnd().x() < bridge.otherEnd().x()
-        );
-
-      } else {
-
-        crossingBridges = allBridges.stream()
-          .filter(x ->
-            x.oneEnd().x() < bridge.oneEnd().x() &&
-            x.otherEnd().x() > bridge.oneEnd().x() &&
-            x.oneEnd().y() > bridge.oneEnd().y() &&
-            x.oneEnd().y() < bridge.otherEnd().y()
-          );
-      }
-
-      crossingBridges.forEach(x -> add(implies(varFor(bridge), not(varFor(x)))));
+      allBridges.stream()
+        .filter(x -> bridge.crosses(x))
+        .forEach(x -> add(implies(varFor(bridge), not(varFor(x)))));
     }
 
     grid.filledCells().forEach(cell -> {
@@ -110,7 +89,7 @@ public class HashiwokakeroSolver extends Solver<Bridge> {
 
     List<Set<Bridge>> links = new LinksFinder(bridges.stream()).find();
 
-    if (links.size() == 1 && links.get(0).size() == bridges.size()) { return true; }
+    if (links.size() == 1) { return true; }
 
     for (Set<Bridge> invalidLink : links) {
 

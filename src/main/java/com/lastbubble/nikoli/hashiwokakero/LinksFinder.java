@@ -45,18 +45,11 @@ class LinksFinder {
 
     for (Bridge bridge : bridgesFor(cell)) {
 
-      if (link.contains(bridge) == false) {
+      link.add(bridge);
 
-        link.add(bridge);
-        bridges.remove(bridge);
+      bridges.remove(bridge);
 
-        Cell oppositeEnd = oppositeEnd(bridge, cell);
-
-        if (traveledCells.contains(oppositeEnd) == false) {
-
-          cellsToTravel.add(oppositeEnd);
-        }
-      }
+      cellsToTravel.add(bridge.oppositeFrom(cell));
     }
 
     cellsToTravel.remove(cell);
@@ -68,13 +61,5 @@ class LinksFinder {
     return bridges.stream()
       .filter(x -> cell.equals(x.oneEnd()) || cell.equals(x.otherEnd()))
       .collect(Collectors.toSet());
-  }
-
-  private static Cell oppositeEnd(Bridge bridge, Cell cell) {
-
-    if (cell.equals(bridge.oneEnd())) { return bridge.otherEnd(); }
-    else if (cell.equals(bridge.otherEnd())) { return bridge.oneEnd(); }
-
-    throw new IllegalArgumentException("cell " + cell + " is not endpoint of " + bridge);
   }
 }

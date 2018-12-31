@@ -97,6 +97,45 @@ public class BridgeTest {
     assertThat(spannedCells, is(reverseBridge.span().collect(Collectors.toList())));
   }
 
+  @Test public void oppositeFrom() {
+
+    Cell otherEnd = cellInSameRow();
+
+    whenConnectingTo(otherEnd);
+
+    assertThat(bridge.oppositeFrom(end), is(otherEnd));
+    assertThat(bridge.oppositeFrom(otherEnd), is(end));
+  }
+
+  @Test public void oppositeFrom_notEndpoint() {
+
+    Cell otherEnd = cellInSameRow();
+
+    whenConnectingTo(otherEnd);
+
+    thrown.expect(IllegalArgumentException.class);
+
+    bridge.oppositeFrom(Cell.at(end.x() + 1, end.y() + 1));
+  }
+
+  @Test public void crosses() {
+
+    bridge = Bridge.connecting(Cell.at(2, 2), Cell.at(2, 4));
+
+    assertBridgeCrosses(false, Cell.at(0, 0), Cell.at(4, 0));
+    assertBridgeCrosses(false, Cell.at(0, 3), Cell.at(1, 3));
+    assertBridgeCrosses(false, Cell.at(0, 4), Cell.at(4, 4));
+    assertBridgeCrosses(true, Cell.at(1, 3), Cell.at(3, 3));
+  }
+
+  private void assertBridgeCrosses(boolean expected, Cell end1, Cell end2) {
+
+    Bridge otherBridge = Bridge.connecting(end1, end2);
+
+    assertThat(bridge.crosses(otherBridge), is(expected));
+    assertThat(otherBridge.crosses(bridge), is(expected));
+  }
+
   @Test public void hashCodeImplemented() {
 
     Cell otherEnd = cellInSameRow();
