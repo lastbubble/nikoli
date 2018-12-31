@@ -104,6 +104,22 @@ public class HashiwokakeroSolver extends Solver<Bridge> {
     return bridges;
   }
 
+  @Override protected boolean acceptable(Stream<Bridge> solution) {
+
+    Set<Bridge> bridges = solution.collect(Collectors.toSet());
+
+    List<Set<Bridge>> links = new LinksFinder(bridges.stream()).find();
+
+    if (links.size() == 1 && links.get(0).size() == bridges.size()) { return true; }
+
+    for (Set<Bridge> invalidLink : links) {
+
+      add(anyOf(invalidLink.stream().map(this::varFor).map(Formula::not)));
+    }
+
+    return false;
+  }
+
   @Override protected Set<Bridge> canonicalize(Set<Bridge> bridges) {
 
     return bridges.stream()
