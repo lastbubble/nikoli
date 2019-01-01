@@ -26,7 +26,7 @@ public class Rasterizer {
 
     IntStream.rangeClosed(0, grid.width()).forEach(x ->
       IntStream.rangeClosed(0, grid.height()).forEach(y -> 
-        raster.set(2 * x, 2 * y, '\u00B7')
+        raster.set(2 * x, 2 * y, '\u2022')
       )
     );
 

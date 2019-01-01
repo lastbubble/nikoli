@@ -18,13 +18,13 @@ public class TakegakiPuzzleTest {
   @Test public void toRaster() {
 
     assertThat(puzzle.toRaster(), matchesLines(
-        ". . . .",
+        "• • • •",
         " 0   1 ",
-        ". . . .",
+        "• • • •",
         "   2   ",
-        ". . . .",
+        "• • • •",
         "     3 ",
-        ". . . ."
+        "• • • •"
       )
     );
   }

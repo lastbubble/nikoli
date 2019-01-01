@@ -16,7 +16,7 @@ public class CharRaster {
 
   public void set(int x, int y, char c) { cells[y][x] = c; }
 
-  public CharRaster transform(Function<Character, Character> f) {
+  private CharRaster transform(Function<Character, Character> f) {
 
     for (char[] row : cells) {
 
