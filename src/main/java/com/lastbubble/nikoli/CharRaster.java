@@ -30,4 +30,24 @@ public class CharRaster {
 
     for (char[] row : cells) { writer.println( new String(row)); }
   }
+
+  public static final char DOT = '\u2022';
+  public static final char SINGLE_HORIZONTAL = '\u2500';
+  public static final char SINGLE_VERTICAL = '\u2502';
+  public static final char SINGLE_DOWN_RIGHT = '\u250C';
+  public static final char SINGLE_DOWN_LEFT = '\u2510';
+  public static final char SINGLE_UP_RIGHT = '\u2514';
+  public static final char SINGLE_UP_LEFT = '\u2518';
+  public static final char SINGLE_VERTICAL_RIGHT = '\u251c';
+  public static final char SINGLE_VERTICAL_LEFT = '\u2524';
+  public static final char SINGLE_DOWN_HORIZONTAL = '\u252c';
+  public static final char SINGLE_UP_HORIZONTAL = '\u2534';
+  public static final char SINGLE_VERTICAL_HORIZONTAL = '\u253c';
+  public static final char DOUBLE_HORIZONTAL = '\u2550';
+  public static final char DOUBLE_VERTICAL = '\u2551';
+  public static final char DOUBLE_DOWN_RIGHT = '\u2554';
+  public static final char DOUBLE_DOWN_LEFT = '\u2557';
+  public static final char DOUBLE_UP_RIGHT = '\u255A';
+  public static final char DOUBLE_UP_LEFT = '\u255D';
+  public static final char FULL_BLOCK = '\u2588';
 }

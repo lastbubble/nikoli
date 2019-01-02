@@ -19,9 +19,13 @@ public class Nurikabe implements PuzzleFactory<Integer, Integer> {
 
     List<String> lines = reader.lines().collect(Collectors.toList());
 
+    int maxWidth = 0;
+
     for (int y = 0; y < lines.size(); y++) {
 
       String[] tokens = lines.get(y).split(",");
+
+      maxWidth = Math.max(maxWidth, tokens.length);
 
       for (int x = 0; x < tokens.length; x++) {
 
@@ -33,6 +37,8 @@ public class Nurikabe implements PuzzleFactory<Integer, Integer> {
         }
       }
     }
+
+    builder.withMaxCell(Cell.at(maxWidth - 1, lines.size() - 1));
 
     return new NurikabePuzzle(builder.build());
   }

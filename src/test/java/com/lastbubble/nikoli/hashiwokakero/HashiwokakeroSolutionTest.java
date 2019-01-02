@@ -34,7 +34,7 @@ public class HashiwokakeroSolutionTest {
       Bridge.connecting(Cell.at(1, 3), Cell.at(3, 3))
     ).collect(Collectors.toSet());
 
-    private final HashiwokakeroSolution solution = new HashiwokakeroSolution(puzzle, bridges);
+  private final HashiwokakeroSolution solution = new HashiwokakeroSolution(puzzle, bridges);
 
   @Test public void puzzle() {
 

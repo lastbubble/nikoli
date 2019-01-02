@@ -9,23 +9,25 @@ import org.junit.Test;
 public class NurikabePuzzleTest {
 
   private final NurikabePuzzle puzzle = new Nurikabe().read(readerFrom(
-      "4, ,4,1",
-      " , , ,1",
-      " , ,3,4",
-      "2,1, ,2"
+      "1, , , ",
+      " , , , ",
+      " , , , ",
+      " , , , "
     )
   );
 
   @Test public void toRaster() {
 
     assertThat(puzzle.toRaster(), matchesLines(
-        "4   4 1",
-        "       ",
-        "      1",
-        "       ",
-        "    3 4",
-        "       ",
-        "2 1   2"
+        "┌─┬─┬─┬─┐",
+        "│1│ │ │ │",
+        "├─┼─┼─┼─┤",
+        "│ │ │ │ │",
+        "├─┼─┼─┼─┤",
+        "│ │ │ │ │",
+        "├─┼─┼─┼─┤",
+        "│ │ │ │ │",
+        "└─┴─┴─┴─┘"
       )
     );
   }
