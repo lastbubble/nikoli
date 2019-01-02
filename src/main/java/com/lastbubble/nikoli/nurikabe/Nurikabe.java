@@ -5,13 +5,15 @@ import com.lastbubble.nikoli.Grid;
 import com.lastbubble.nikoli.Puzzle;
 import com.lastbubble.nikoli.PuzzleFactory;
 import com.lastbubble.nikoli.Solution;
+import com.lastbubble.nikoli.solver.Solver;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Nurikabe implements PuzzleFactory<Integer, Integer> {
+public class Nurikabe implements PuzzleFactory<Integer, Cell> {
 
   @Override public NurikabePuzzle read(BufferedReader reader) {
 
@@ -43,9 +45,17 @@ public class Nurikabe implements PuzzleFactory<Integer, Integer> {
     return new NurikabePuzzle(builder.build());
   }
 
-  @Override public Iterable<? extends Solution<Integer, Integer>> solve(Puzzle<Integer> puzzle) {
+  @Override public Iterable<? extends Solution<Integer, Cell>> solve(Puzzle<Integer> puzzle) {
 
-    return null;
+    List<NurikabeSolution> solutions = new ArrayList<NurikabeSolution>();
+
+    Solver<Cell> solver = new NurikabeSolver(puzzle.grid());
+
+    solver.solve(pathCells -> {
+      solutions.add( new NurikabeSolution(puzzle, pathCells));
+    });
+
+    return solutions;
   }
 
   private static final Pattern CELL_PATTERN = Pattern.compile("0|1|2|3|4|5|6|7|8|9");
