@@ -34,7 +34,7 @@ public class HashiwokakeroSolutionTest {
       Bridge.connecting(Cell.at(1, 3), Cell.at(3, 3))
     ).collect(Collectors.toSet());
 
-    private final HashiwokakeroSolution solution = new HashiwokakeroSolution(puzzle, bridges);
+  private final HashiwokakeroSolution solution = new HashiwokakeroSolution(puzzle, bridges);
 
   @Test public void puzzle() {
 
@@ -49,13 +49,13 @@ public class HashiwokakeroSolutionTest {
   @Test public void toRaster() {
 
     assertThat(solution.toRaster(), matchesLines(
-        "4===4-1",
-        "H   |  ",
-        "H   | 1",
-        "H   | |",
-        "H   3=4",
-        "H     |",
-        "2 1---2"
+        "4═══4─1",
+        "║   │  ",
+        "║   │ 1",
+        "║   │ │",
+        "║   3═4",
+        "║     │",
+        "2 1───2"
       )
     );
   }

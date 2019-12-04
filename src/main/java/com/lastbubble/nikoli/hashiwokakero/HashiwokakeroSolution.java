@@ -1,5 +1,7 @@
 package com.lastbubble.nikoli.hashiwokakero;
 
+import static com.lastbubble.nikoli.CharRaster.*;
+
 import com.lastbubble.nikoli.Cell;
 import com.lastbubble.nikoli.CharRaster;
 import com.lastbubble.nikoli.Puzzle;
@@ -43,13 +45,13 @@ class HashiwokakeroSolution implements Solution<Integer, Bridge> {
 
         rasterCells = IntStream.range(2 * firstCell.x() + 1, 2 * lastCell.x())
           .mapToObj(x -> Cell.at(x, 2 * firstCell.y()));
-        bridgeChar = bridge.weight() > 1 ? '\u2550' : '\u2500';
+        bridgeChar = bridge.weight() > 1 ? DOUBLE_HORIZONTAL : SINGLE_HORIZONTAL;
 
       } else {
 
         rasterCells = IntStream.range(2 * firstCell.y() + 1, 2 * lastCell.y())
           .mapToObj(y -> Cell.at(2 * firstCell.x(), y));
-        bridgeChar = bridge.weight() > 1 ? '\u2551' : '\u2502';
+        bridgeChar = bridge.weight() > 1 ? DOUBLE_VERTICAL : SINGLE_VERTICAL;
       }
 
       rasterCells.forEach(c -> raster.set(c.x(), c.y(), bridgeChar));

@@ -1,5 +1,7 @@
 package com.lastbubble.nikoli.takegaki;
 
+import static com.lastbubble.nikoli.CharRaster.*;
+
 import com.lastbubble.nikoli.CharRaster;
 import com.lastbubble.nikoli.Grid;
 
@@ -26,7 +28,7 @@ public class Rasterizer {
 
     IntStream.rangeClosed(0, grid.width()).forEach(x ->
       IntStream.rangeClosed(0, grid.height()).forEach(y -> 
-        raster.set(2 * x, 2 * y, '\u00B7')
+        raster.set(2 * x, 2 * y, DOT)
       )
     );
 
@@ -39,36 +41,36 @@ public class Rasterizer {
 
           int y = 2 * e.y();
 
-          raster.set(2 * e.x() + 1, y, '\u2550');
+          raster.set(2 * e.x() + 1, y, DOUBLE_HORIZONTAL);
 
           if (pathEdges.contains(Edge.at(e.x() + 1, e.y(), Edge.H))) {
-            raster.set(2 * e.x() + 1 + 1, y, '\u2550');
+            raster.set(2 * e.x() + 1 + 1, y, DOUBLE_HORIZONTAL);
           }
 
           if (pathEdges.contains(Edge.at(e.x(), e.y(), Edge.V))) {
-            raster.set(2 * e.x(), y, '\u2554');
+            raster.set(2 * e.x(), y, DOUBLE_DOWN_RIGHT);
           }
 
           if (pathEdges.contains(Edge.at(e.x() + 1, e.y(), Edge.V))) {
-            raster.set(2 * e.x() + 1 + 1, y, '\u2557');
+            raster.set(2 * e.x() + 1 + 1, y, DOUBLE_DOWN_LEFT);
           }
 
           if (e.y() > 0 && pathEdges.contains(Edge.at(e.x(), e.y() - 1, Edge.V))) {
-            raster.set(2 * e.x(), y, '\u255A');
+            raster.set(2 * e.x(), y, DOUBLE_UP_RIGHT);
           }
 
           if (e.y() > 0 && pathEdges.contains(Edge.at(e.x() + 1, e.y() - 1, Edge.V))) {
-            raster.set(2 * e.x() + 1 + 1, y, '\u255D');
+            raster.set(2 * e.x() + 1 + 1, y, DOUBLE_UP_LEFT);
           }
 
         } else {
 
           int x = 2 * e.x();
 
-          raster.set(x, 2 * e.y() + 1, '\u2551');
+          raster.set(x, 2 * e.y() + 1, DOUBLE_VERTICAL);
 
           if (pathEdges.contains(Edge.at(e.x(), e.y() + 1, Edge.V))) {
-            raster.set(x, 2 * e.y() + 1 + 1, '\u2551');
+            raster.set(x, 2 * e.y() + 1 + 1, DOUBLE_VERTICAL);
           }
         }
       }

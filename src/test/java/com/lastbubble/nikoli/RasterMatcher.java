@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.arrayContaining;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.util.function.Function;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,27 +29,11 @@ public class RasterMatcher extends TypeSafeMatcher<CharRaster> {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     PrintWriter writer = new PrintWriter(out);
-    raster.transform(RASTER_TRANSFORM).printTo(writer);
+    raster.printTo(writer);
     writer.close();
 
     return out.toString().split("\n");
   }
-
-  private static final Function<Character, Character> RASTER_TRANSFORM = c -> {
-    switch (c) {
-      case '\u00B7': return '.'; // dot
-      case '\u2500': return '-'; // single horizontal
-      case '\u2502': return '|'; // single vertical
-      case '\u2550': return '='; // double horizontal
-      case '\u2551': return 'H'; // double vertical
-      case '\u2554': return 'r'; // down and right
-      case '\u2557': return '7'; // down and left
-      case '\u255A': return 'L'; // up and right
-      case '\u255D': return ']'; // up and left
-      default: break;
-    }
-    return c;
-  };
 
   @Override public void describeTo(Description description) {
 

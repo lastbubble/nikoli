@@ -26,15 +26,4 @@ public class CharRasterTest {
 
     assertThat(raster, matchesLines("a b", "cd "));
   }
-
-  @Test public void transform() {
-
-    raster = new CharRaster(3, 2);
-    raster.set(0, 0, 'a');
-    raster.set(2, 0, 'b');
-    raster.set(0, 1, 'c');
-    raster.set(1, 1, 'd');
-
-    assertThat(raster.transform(Character::toUpperCase), matchesLines("A B", "CD "));
-  }
 }

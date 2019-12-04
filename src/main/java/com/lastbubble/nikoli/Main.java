@@ -1,8 +1,6 @@
 package com.lastbubble.nikoli;
 
-import com.lastbubble.nikoli.hashiwokakero.Bridge;
 import com.lastbubble.nikoli.hashiwokakero.Hashiwokakero;
-import com.lastbubble.nikoli.takegaki.Edge;
 import com.lastbubble.nikoli.takegaki.Takegaki;
 
 import java.io.BufferedReader;
@@ -16,40 +14,31 @@ public class Main {
 
     PrintWriter out = new PrintWriter(System.out, true);
 
+    PuzzleFactory<?, ?> puzzleFactory = null;
+
     String type = args[0];
+    if      (type.equals("takegaki"))      { puzzleFactory = new Takegaki(); }
+    else if (type.equals("hashiwokakero")) { puzzleFactory = new Hashiwokakero(); }
+
     BufferedReader reader = Files.newBufferedReader(Paths.get(args[1]));
 
-    if (type.equals("takegaki")) {
+    if (puzzleFactory != null) { printAndSolve(out, puzzleFactory, reader); }
+  }
 
-      PuzzleFactory<Integer, Edge> takegaki = new Takegaki();
+  private static <C, E> void printAndSolve(
+    PrintWriter out, PuzzleFactory<C, E> puzzleFactory, BufferedReader reader
+  ) {
 
-      Puzzle<Integer> puzzle = takegaki.read(reader);
+    Puzzle<C> puzzle = puzzleFactory.read(reader);
 
-      out.println("\nPUZZLE\n======");
-      puzzle.toRaster().printTo(out);
+    out.println("\nPUZZLE\n======");
+    puzzle.toRaster().printTo(out);
 
-      Iterable<? extends Solution<Integer, Edge>> solutions = takegaki.solve(puzzle);
+    Iterable<? extends Solution<C, E>> solutions = puzzleFactory.solve(puzzle);
 
-      out.println("\nSOLUTION\n========");
-      for (Solution<Integer, Edge> solution : solutions) {
-        solution.toRaster().printTo(out);
-      }
-
-    } else if (type.equals("hashiwokakero")) {
-
-      PuzzleFactory<Integer, Bridge> hashiwokakero = new Hashiwokakero();
-
-      Puzzle<Integer> puzzle = hashiwokakero.read(reader);
-
-      out.println("\nPUZZLE\n======");
-      puzzle.toRaster().printTo(out);
-
-      Iterable<? extends Solution<Integer, Bridge>> solutions = hashiwokakero.solve(puzzle);
-
-      out.println("\nSOLUTION\n========");
-      for (Solution<Integer, Bridge> solution : solutions) {
-        solution.toRaster().printTo(out);
-      }
+    out.println("\nSOLUTION\n========");
+    for (Solution<C, E> solution : solutions) {
+      solution.toRaster().printTo(out);
     }
   }
 }

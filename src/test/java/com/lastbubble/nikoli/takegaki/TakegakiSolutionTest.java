@@ -49,13 +49,13 @@ public class TakegakiSolutionTest {
   @Test public void toRaster() {
 
     assertThat(solution.toRaster(), matchesLines(
-        "r===7 .",
-        "H2 3H  ",
-        "H r=] .",
-        "H H3   ",
-        "H L===7",
-        "H2   3H",
-        "L=====]"
+        "╔═══╗ •",
+        "║2 3║  ",
+        "║ ╔═╝ •",
+        "║ ║3   ",
+        "║ ╚═══╗",
+        "║2   3║",
+        "╚═════╝"
       )
     );
   }

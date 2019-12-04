@@ -60,14 +60,14 @@ public abstract class Formula {
 
     public T data() { return data; }
 
-    @Override public <T> T match(
-      Function<Var<?>, T> var,
-      Function<Not, T> not,
-      Function<And, T> and,
-      Function<Or, T> or,
-      Function<Implies, T> implies,
-      Function<AllOf, T> allOf,
-      Function<AnyOf, T> anyOf
+    @Override public <V> V match(
+      Function<Var<?>, V> var,
+      Function<Not, V> not,
+      Function<And, V> and,
+      Function<Or, V> or,
+      Function<Implies, V> implies,
+      Function<AllOf, V> allOf,
+      Function<AnyOf, V> anyOf
     ) {
       return var.apply(this);
     }

@@ -53,7 +53,36 @@ public class Bridge {
 
   public Cell otherEnd() { return end1.compareTo(end2) > 0 ? end1 : end2; }
 
+  public Cell oppositeFrom(Cell end) {
+
+    if (end.equals(end1)) { return end2; }
+    else if (end.equals(end2)) { return end1; }
+
+    throw new IllegalArgumentException(end + " is not an endpoint of " + this);
+  }
+
+  public boolean crosses(Bridge that) {
+
+    return (end1.y() == end2.y()) ?
+      (
+        that.oneEnd().y() < this.oneEnd().y() &&
+        that.otherEnd().y() > this.oneEnd().y() &&
+        that.oneEnd().x() > this.oneEnd().x() &&
+        that.oneEnd().x() < this.otherEnd().x()
+      ) :
+      (
+        that.oneEnd().x() < this.oneEnd().x() &&
+        that.otherEnd().x() > this.oneEnd().x() &&
+        that.oneEnd().y() > this.oneEnd().y() &&
+        that.oneEnd().y() < this.otherEnd().y()
+      );
+  }
+
   public int weight() { return weight; }
+
+  public Bridge withWeight(int n) { return new Bridge(end1, end2, n); }
+
+  public Bridge incrementWeight() { return withWeight(weight() + 1); }
 
   @Override public int hashCode() { return Objects.hash(oneEnd(), otherEnd(), weight); }
 
@@ -81,8 +110,4 @@ public class Bridge {
       oneEnd().x(), oneEnd().y(), (weight > 1) ? '=' : '-', otherEnd().x(), otherEnd().y()
     );
   }
-
-  public Bridge withWeight(int n) { return new Bridge(end1, end2, n); }
-
-  public Bridge incrementWeight() { return withWeight(weight() + 1); }
 }

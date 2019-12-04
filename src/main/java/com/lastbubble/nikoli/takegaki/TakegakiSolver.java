@@ -2,7 +2,6 @@ package com.lastbubble.nikoli.takegaki;
 
 import static com.lastbubble.nikoli.logic.Formula.*;
 
-import com.lastbubble.nikoli.Cell;
 import com.lastbubble.nikoli.Grid;
 import com.lastbubble.nikoli.logic.Formula;
 import com.lastbubble.nikoli.solver.Solver;
@@ -25,9 +24,7 @@ public class TakegakiSolver extends Solver<Edge> {
       Edge.edgesOf(cell).forEach(edge ->
         Stream.of(true, false).forEach(up -> {
           add(edgeConnectionsFor(edge, up));
-          if (grid.valueAt(cell).isPresent()) {
-            add(pathEdgesForCell(cell, grid.valueAt(cell).get()));
-          }
+          grid.valueAt(cell).ifPresent(x -> addExactly(x, Edge.edgesOf(cell)));
         })
       )
     );
@@ -79,77 +76,6 @@ public class TakegakiSolver extends Solver<Edge> {
     }
   }
 
-  private Formula pathEdgesForCell(Cell cell, int count) {
-
-    List<Var<Edge>> edgeVars = Edge.edgesOf(cell).map(this::varFor).collect(Collectors.toList());
-    Var<Edge> a = edgeVars.get(0);
-    Var<Edge> b = edgeVars.get(1);
-    Var<Edge> c = edgeVars.get(2);
-    Var<Edge> d = edgeVars.get(3);
-
-    switch (count) {
-
-      case 0:
-        return allOf(
-          not(a),
-          not(b),
-          not(c),
-          not(d)
-        );
-
-      case 1:
-        // (a | b | c | d) & (a => ~b & ~c ~d) & (b => ~a & ~c & ~d) & (c => ~a & ~b & ~d) & (d => ~a & ~b & ~c)
-        return allOf(
-          anyOf(a, b, c, d),
-          anyOf(not(a), not(b)),
-          anyOf(not(a), not(c)),
-          anyOf(not(a), not(d)),
-          anyOf(not(b), not(c)),
-          anyOf(not(b), not(d)),
-          anyOf(not(c), not(d))
-        );
-
-      case 2:
-        // (a | b | c | d) &
-        //   a => (b | c | d) &
-        //   b => (a | c | d) &
-        //   c => (a | b | d) &
-        //   d => (a | b | c) &
-        //   (a & b) => (~c & ~d) &
-        //   (a & c) => (~b & ~d) &
-        //   (a & d) => (~b & ~c) &
-        //   (b & c) => (~a & ~d) &
-        //   (b & d) => (~a & ~c) &
-        //   (c & d) => (~a & ~b)
-        return allOf(
-          anyOf(a, b, c, d),
-          anyOf(not(a), b, c, d),
-          anyOf(a, not(b), c, d),
-          anyOf(a, b, not(c), d),
-          anyOf(a, b, c, not(d)),
-          anyOf(not(a), not(b), not(c)),
-          anyOf(not(a), not(b), not(d)),
-          anyOf(not(a), not(c), not(d)),
-          anyOf(not(b), not(c), not(d))
-        );
-
-      case 3:
-        // (~a | ~b | ~c | ~d) & (~a => b & c d) & (~b => a & c & d) & (~c => a & b & d) & (~d => a & b & c)
-        return allOf(
-          anyOf(not(a), not(b), not(c), not(d)),
-          anyOf(a, b),
-          anyOf(a, c),
-          anyOf(a, d),
-          anyOf(b, c),
-          anyOf(b, d),
-          anyOf(c, d)
-        );
-
-      default:
-        throw new IllegalArgumentException("Invalid cell value: " + count);
-    }
-  }
-
   private Predicate<Edge> validEdge() {
     return e -> {
       int x = e.x();
@@ -167,7 +93,7 @@ public class TakegakiSolver extends Solver<Edge> {
 
     List<List<Edge>> loops = Loops.findLoopsIn(edgeSet.stream());
 
-    if (loops.size() == 1 && loops.get(0).size() == edgeSet.size()) { return true; }
+    if (loops.size() == 1) { return true; }
 
     for (List<Edge> invalidLoop : loops) {
 
