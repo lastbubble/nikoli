@@ -4,7 +4,6 @@ import static com.lastbubble.nikoli.CharRaster.*;
 
 import com.lastbubble.nikoli.Cell;
 import com.lastbubble.nikoli.CharRaster;
-import com.lastbubble.nikoli.Grid;
 import com.lastbubble.nikoli.Puzzle;
 import com.lastbubble.nikoli.Solution;
 

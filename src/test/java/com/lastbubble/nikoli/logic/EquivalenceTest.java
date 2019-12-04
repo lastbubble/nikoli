@@ -190,7 +190,7 @@ public class EquivalenceTest {
 
     truthAssignment.clear();
 
-    Var[] vars = new Var[] { a, b, c, d };
+    Var<?>[] vars = new Var[] { a, b, c, d };
 
     for (int i = 0; i < truths.length; i++) { truthAssignment.put(vars[i], truths[i]); }
   }
@@ -200,14 +200,14 @@ public class EquivalenceTest {
   private Formula formula1;
   private Formula formula2;
 
-  private final Map<Var, Boolean> truthAssignment = new HashMap<>();
+  private final Map<Var<?>, Boolean> truthAssignment = new HashMap<>();
 
   private final Predicate<Formula> truth = f -> truthAssignment.get(f);
 
   private static Stream<Boolean> booleans() { return Stream.of(true, false); }
 
-  private static final Var a = var("a");
-  private static final Var b = var("b");
-  private static final Var c = var("c");
-  private static final Var d = var("d");
+  private static final Var<?> a = var("a");
+  private static final Var<?> b = var("b");
+  private static final Var<?> c = var("c");
+  private static final Var<?> d = var("d");
 }
