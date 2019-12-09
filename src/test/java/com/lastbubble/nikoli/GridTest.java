@@ -2,6 +2,9 @@ package com.lastbubble.nikoli;
 
 import static com.lastbubble.nikoli.RandomNumbers.*;
 import static org.junit.Assert.assertThat;
+
+import java.util.stream.Stream;
+
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
@@ -21,8 +24,6 @@ public class GridTest {
   }
 
   @Test public void assignMaxCell() {
-
-    Cell cell = randomCell();
 
     grid = builder.withMaxCell(cell).build();
 
@@ -49,7 +50,7 @@ public class GridTest {
 
   @Test public void expandToIncludeAssignedCells() {
 
-    Cell maxCell = randomCell();
+    Cell maxCell = cell;
 
     Cell assignedCell = Cell.at(maxCell.x() + positiveNumber(), maxCell.y() + positiveNumber());
 
@@ -61,9 +62,6 @@ public class GridTest {
 
   @Test public void assignValueToCell() {
 
-    Cell cell = randomCell();
-    String a = "a";
-
     grid = builder.assign(cell, a).build();
 
     assertThat(grid.valueAt(cell).orElse(null), is(a));
@@ -72,9 +70,6 @@ public class GridTest {
   }
 
   @Test public void reuseBuilder() {
-
-    Cell cell = randomCell();
-    String a = "a";
 
     grid = builder.assign(cell, a).build();
 
@@ -86,19 +81,12 @@ public class GridTest {
 
   @Test public void assignMultipleValuesToCell() {
 
-    Cell cell = randomCell();
-    String a = "a";
-    String b = "b";
-
     grid = builder.assign(cell, a).assign(cell, b).build();
 
     assertThat(grid.valueAt(cell).orElse(null), is(b));
   }
 
   @Test public void assignNullValueToCell() {
-
-    Cell cell = randomCell();
-    String a = "a";
 
     grid = builder.assign(cell, a).assign(cell, null).build();
 
@@ -107,17 +95,55 @@ public class GridTest {
 
   @Test public void assignMultipleValuesToMultipleCells() {
 
-    Cell cell1 = randomCell();
-    String a = "a";
+    grid = builder.assign(cell, a).assign(otherCell, b).build();
 
-    Cell cell2 = Cell.at(naturalNumberOtherThan(cell1.x()), naturalNumberOtherThan(cell1.y()));
-    String b = "b";
-
-    grid = builder.assign(cell1, a).assign(cell2, b).build();
-
-    assertThat(grid.valueAt(cell1).orElse(null), is(a));
-    assertThat(grid.valueAt(cell2).orElse(null), is(b));
+    assertThat(grid.valueAt(cell).orElse(null), is(a));
+    assertThat(grid.valueAt(otherCell).orElse(null), is(b));
   }
+
+  @Test public void createBuilderFrom() {
+
+    grid = builder.assign(cell, a).build();
+
+    Grid<String> otherGrid = grid.toBuilder().assign(otherCell, b).build();
+
+    assertThat(grid.valueAt(cell).orElse(null), is(a));
+    assertThat(otherGrid.valueAt(cell).orElse(null), is(a));
+
+    assertThat(grid.valueAt(otherCell).isPresent(), is(false));
+    assertThat(otherGrid.valueAt(otherCell).orElse(null), is(b));
+  }
+
+  @Test public void createBuilderFromAndReplaceCellValue() {
+
+    grid = builder.assign(cell, a).build();
+
+    Grid<String> otherGrid = grid.toBuilder().assign(cell, b).build();
+
+    assertThat(grid.valueAt(cell).orElse(null), is(a));
+    assertThat(otherGrid.valueAt(cell).orElse(null), is(b));
+  }
+
+  @Test public void buildUsingFilledCells() {
+
+    grid = builder
+      .fillUsing(Stream.of(
+          FilledCell.using(cell, a),
+          FilledCell.using(otherCell, b)
+        )
+      )
+      .build();
+
+    assertThat(grid.valueAt(cell).orElse(null), is(a));
+    assertThat(grid.valueAt(otherCell).orElse(null), is(b));
+  }
+
+  private static final String a = "a";
+  private static final String b = "b";
+
+  private static final Cell cell = randomCell();
+  private static final Cell otherCell =
+    Cell.at(naturalNumberOtherThan(cell.x()), naturalNumberOtherThan(cell.y()));
 
   private static Cell randomCell() {
 

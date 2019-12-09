@@ -36,6 +36,13 @@ public class Grid<V> {
 
   public Optional<V> valueAt(Cell cell) { return Optional.ofNullable(values.get(cell)); }
 
+  public Builder<V> toBuilder() {
+
+    Builder<V> builder = builder();
+    values.forEach((c, v) -> builder.assign(c, v));
+    return builder;
+  }
+
   public static <V> Builder<V> builder() { return new Builder<V>(); }
 
   public static class Builder<V> {
@@ -46,6 +53,10 @@ public class Grid<V> {
     public Builder<V> withMaxCell(Cell c) { maxCell = c; return this; }
 
     public Builder<V> assign(Cell c, V v) { values.put(c, v); return this; }
+
+    public Builder<V> fillUsing(Stream<FilledCell<V>> filledCells) {
+      filledCells.forEach(c -> assign(c.cell(), c.value())); return this;
+    }
 
     public Grid<V> build() {
 

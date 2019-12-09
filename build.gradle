@@ -9,6 +9,7 @@ repositories {
 }
 
 dependencies {
+  compile 'com.google.guava:guava:23.0'
   compile 'org.ow2.sat4j:org.ow2.sat4j.core:2.3.4'
 
   testCompile 'junit:junit:4.12'

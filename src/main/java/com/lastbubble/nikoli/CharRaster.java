@@ -49,5 +49,16 @@ public class CharRaster {
   public static final char DOUBLE_DOWN_LEFT = '\u2557';
   public static final char DOUBLE_UP_RIGHT = '\u255A';
   public static final char DOUBLE_UP_LEFT = '\u255D';
+  public static final char DOUBLE_VERTICAL_SINGLE_RIGHT = '\u255F';
+  public static final char DOUBLE_VERTICAL_RIGHT = '\u2560';
+  public static final char DOUBLE_VERTICAL_SINGLE_LEFT = '\u2562';
+  public static final char DOUBLE_VERTICAL_LEFT = '\u2563';
+  public static final char DOUBLE_DOWN_HORIZONTAL = '\u2566';
+  public static final char DOUBLE_UP_HORIZONTAL = '\u2569';
+  public static final char SINGLE_VERTICAL_DOUBLE_HORIZONTAL = '\u256A';
+  public static final char DOUBLE_VERTICAL_SINGLE_HORIZONTAL = '\u256B';
+  public static final char DOUBLE_VERTICAL_HORIZONTAL = '\u256C';
   public static final char FULL_BLOCK = '\u2588';
+  public static final char SINGLE_DOWN_DOUBLE_HORIZONTAL = '\u2564';
+  public static final char SINGLE_UP_DOUBLE_HORIZONTAL = '\u2567';
 }

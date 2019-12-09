@@ -1,6 +1,7 @@
 package com.lastbubble.nikoli;
 
 import com.lastbubble.nikoli.hashiwokakero.Hashiwokakero;
+import com.lastbubble.nikoli.sudoku.Sudoku;
 import com.lastbubble.nikoli.takegaki.Takegaki;
 
 import java.io.BufferedReader;
@@ -19,6 +20,7 @@ public class Main {
     String type = args[0];
     if      (type.equals("takegaki"))      { puzzleFactory = new Takegaki(); }
     else if (type.equals("hashiwokakero")) { puzzleFactory = new Hashiwokakero(); }
+    else if (type.equals("sudoku"))        { puzzleFactory = new Sudoku(); }
 
     BufferedReader reader = Files.newBufferedReader(Paths.get(args[1]));
 

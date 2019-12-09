@@ -67,4 +67,8 @@ public class Cell implements Comparable<Cell> {
       return false;
     }
   }
+
+  @Override public String toString() {
+    return String.format("Cell[%s,%s]", x, y);
+  }
 }
