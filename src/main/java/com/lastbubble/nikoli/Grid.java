@@ -3,7 +3,9 @@ package com.lastbubble.nikoli;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Grid<V> {
@@ -32,9 +34,24 @@ public class Grid<V> {
       .limit(width() * height());
   }
 
+  public Stream<Cell> rowContaining(Cell c) {
+    return IntStream.range(0, width()).mapToObj(x -> Cell.at(x, c.y()));
+  }
+
+  public Stream<Cell> columnContaining(Cell c) {
+    return IntStream.range(0, height()).mapToObj(y -> Cell.at(c.x(), y));
+  }
+
   public Stream<Cell> filledCells() { return values.keySet().stream(); }
 
+  public boolean isCompletelyFilled() { return (width() * height()) == values.size(); }
+
   public Optional<V> valueAt(Cell cell) { return Optional.ofNullable(values.get(cell)); }
+
+  public boolean valueFoundIn(Stream<Cell> group, V value) {
+
+    return group.anyMatch(c -> Objects.equals(values.get(c), value));
+  }
 
   public Builder<V> toBuilder() {
 

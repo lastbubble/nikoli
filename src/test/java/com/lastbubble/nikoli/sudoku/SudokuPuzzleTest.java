@@ -30,48 +30,6 @@ public class SudokuPuzzleTest {
     )
   );
 
-  @Test public void rowContaining() {
-
-    assertThatCellsAre(puzzle.rowContaining(Cell.at(0,0)),
-      Cell.at(0,0), Cell.at(1,0), Cell.at(2,0),
-      Cell.at(3,0), Cell.at(4,0), Cell.at(5,0),
-      Cell.at(6,0), Cell.at(7,0), Cell.at(8,0)
-    );
-
-    assertThatCellsAre(puzzle.rowContaining(Cell.at(8,0)),
-      Cell.at(0,0), Cell.at(1,0), Cell.at(2,0),
-      Cell.at(3,0), Cell.at(4,0), Cell.at(5,0),
-      Cell.at(6,0), Cell.at(7,0), Cell.at(8,0)
-    );
-
-    assertThatCellsAre(puzzle.rowContaining(Cell.at(4,8)),
-      Cell.at(0,8), Cell.at(1,8), Cell.at(2,8),
-      Cell.at(3,8), Cell.at(4,8), Cell.at(5,8),
-      Cell.at(6,8), Cell.at(7,8), Cell.at(8,8)
-    );
-  }
-
-  @Test public void columnContaining() {
-
-    assertThatCellsAre(puzzle.columnContaining(Cell.at(0,0)),
-      Cell.at(0,0), Cell.at(0,1), Cell.at(0,2),
-      Cell.at(0,3), Cell.at(0,4), Cell.at(0,5),
-      Cell.at(0,6), Cell.at(0,7), Cell.at(0,8)
-    );
-
-    assertThatCellsAre(puzzle.columnContaining(Cell.at(0,8)),
-      Cell.at(0,0), Cell.at(0,1), Cell.at(0,2),
-      Cell.at(0,3), Cell.at(0,4), Cell.at(0,5),
-      Cell.at(0,6), Cell.at(0,7), Cell.at(0,8)
-    );
-
-    assertThatCellsAre(puzzle.columnContaining(Cell.at(8,4)),
-      Cell.at(8,0), Cell.at(8,1), Cell.at(8,2),
-      Cell.at(8,3), Cell.at(8,4), Cell.at(8,5),
-      Cell.at(8,6), Cell.at(8,7), Cell.at(8,8)
-    );
-  }
-
   @Test public void regionContaining() {
 
     Stream<List<Cell>> regions = Stream.of(
@@ -131,10 +89,6 @@ public class SudokuPuzzleTest {
 
   private void assertThatCellsAre(Stream<Cell> stream, Stream<Cell> expected) {
     assertThat(stream.collect(toSet()), is(expected.collect(toSet())));
-  }
-
-  private void assertThatCellsAre(Stream<Cell> stream, Cell... expected) {
-    assertThat(stream.collect(toSet()), containsInAnyOrder(expected));
   }
 
   @Test public void toRaster() {

@@ -1,6 +1,8 @@
 package com.lastbubble.nikoli;
 
 import static com.lastbubble.nikoli.RandomNumbers.*;
+import static java.util.stream.Collectors.toSet;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 import java.util.stream.Stream;
@@ -136,6 +138,80 @@ public class GridTest {
 
     assertThat(grid.valueAt(cell).orElse(null), is(a));
     assertThat(grid.valueAt(otherCell).orElse(null), is(b));
+  }
+
+  @Test public void isCompletelyFilled() {
+
+    builder.withMaxCell(Cell.at(1,1));
+
+    builder.assign(Cell.at(1,0), a);
+    assertThat(builder.build().isCompletelyFilled(), is(false));
+
+    builder.assign(Cell.at(1,0), a).assign(Cell.at(1,1), a);
+    assertThat(builder.build().isCompletelyFilled(), is(false));
+
+    builder.assign(Cell.at(1,0), a).assign(Cell.at(1,1), a).assign(Cell.at(0,0), a);
+    assertThat(builder.build().isCompletelyFilled(), is(false));
+
+    builder.assign(Cell.at(1,0), a).assign(Cell.at(1,1), a).assign(Cell.at(0,0), a).assign(Cell.at(0,1), a);
+    assertThat(builder.build().isCompletelyFilled(), is(true));
+  }
+
+  @Test public void rowContaining() {
+
+    grid = builder.withMaxCell(Cell.at(2,2)).build();
+
+    assertThatCellsAre(grid.rowContaining(Cell.at(0,0)),
+      Cell.at(0,0), Cell.at(1,0), Cell.at(2,0)
+    );
+
+    assertThatCellsAre(grid.rowContaining(Cell.at(1,0)),
+      Cell.at(0,0), Cell.at(1,0), Cell.at(2,0)
+    );
+
+    assertThatCellsAre(grid.rowContaining(Cell.at(1,1)),
+      Cell.at(0,1), Cell.at(1,1), Cell.at(2,1)
+    );
+
+    assertThatCellsAre(grid.rowContaining(Cell.at(2,2)),
+      Cell.at(0,2), Cell.at(1,2), Cell.at(2,2)
+    );
+  }
+
+  @Test public void columnContaining() {
+
+    grid = builder.withMaxCell(Cell.at(2,2)).build();
+
+    assertThatCellsAre(grid.columnContaining(Cell.at(0,0)),
+      Cell.at(0,0), Cell.at(0,1), Cell.at(0,2)
+    );
+
+    assertThatCellsAre(grid.columnContaining(Cell.at(0,1)),
+      Cell.at(0,0), Cell.at(0,1), Cell.at(0,2)
+    );
+
+    assertThatCellsAre(grid.columnContaining(Cell.at(1,1)),
+      Cell.at(1,0), Cell.at(1,1), Cell.at(1,2)
+    );
+
+    assertThatCellsAre(grid.columnContaining(Cell.at(2,2)),
+      Cell.at(2,0), Cell.at(2,1), Cell.at(2,2)
+    );
+  }
+
+  private void assertThatCellsAre(Stream<Cell> stream, Cell... expected) {
+    assertThat(stream.collect(toSet()), containsInAnyOrder(expected));
+  }
+
+  @Test public void anyCellsContain() {
+
+    grid = builder.assign(Cell.at(1,0), a).assign(Cell.at(0,1), b).build();
+
+    assertThat(grid.valueFoundIn(grid.rowContaining(Cell.at(0,0)), a), is(true));
+    assertThat(grid.valueFoundIn(grid.rowContaining(Cell.at(0,1)), a), is(false));
+
+    assertThat(grid.valueFoundIn(grid.rowContaining(Cell.at(0,0)), b), is(false));
+    assertThat(grid.valueFoundIn(grid.rowContaining(Cell.at(0,1)), b), is(true));
   }
 
   private static final String a = "a";

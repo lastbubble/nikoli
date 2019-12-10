@@ -2,7 +2,6 @@ package com.lastbubble.nikoli.sudoku;
 
 import static com.lastbubble.nikoli.CharRaster.*;
 
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.lastbubble.nikoli.Cell;
@@ -17,14 +16,6 @@ class SudokuPuzzle implements Puzzle<Value> {
   SudokuPuzzle(Grid<Value> grid) { this.grid = grid; }
 
   @Override public Grid<Value> grid() { return grid; }
-
-  public Stream<Cell> rowContaining(Cell c) {
-    return IntStream.range(0, 9).mapToObj(x -> Cell.at(x, c.y()));
-  }
-
-  public Stream<Cell> columnContaining(Cell c) {
-    return IntStream.range(0, 9).mapToObj(y -> Cell.at(c.x(), y));
-  }
 
   public Stream<Cell> regionContaining(Cell c) {
 
